@@ -1,0 +1,141 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>튜토리얼 · 첫 운행 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획_튜토리얼_첫운행.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<ul>
+<li><a href="#2026-09-18">튜토리얼 '첫 운행' (2026-09-18 구현)</a><ul>
+<li><a href="#_1">원칙 (사용자 지시)</a></li>
+<li><a href="#3">사용자 결정 3건</a></li>
+<li><a href="#_2">여섯 장</a><ul>
+<li><a href="#play-2026-09-18">Play 실측으로 바뀐 것 (2026-09-18)</a></li>
+</ul>
+</li>
+<li><a href="#11-firstsightcards">처음 볼 때 카드 11종 (FirstSightCards)</a></li>
+<li><a href="#_3">구조</a></li>
+<li><a href="#_4">남은 검증</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="2026-09-18">튜토리얼 '첫 운행' (2026-09-18 구현)<a class="headerlink" href="#2026-09-18" title="Permanent link"> ¶</a></h1>
+<p>새 게임의 첫 20~25분을 여섯 장으로 나눈 <strong>대본 있는 운행</strong>. 대본이 끝나거나 건너뛰면 새 상황을 처음 만날 때만 짧은 <strong>'처음 볼 때' 카드</strong>가 뜬다.
+컨셉샷·설계 과정: 아티팩트 "방주 열차 첫 운행" v2.</p>
+<h2 id="_1">원칙 (사용자 지시)<a class="headerlink" href="#_1" title="Permanent link"> ¶</a></h2>
+<ul>
+<li><strong>안내는 버튼을 밝힌다. 단축키는 말하지 않는다.</strong> 누를 곳에 시안 링, 끌어 놓기는 흐르는 점 경로.</li>
+<li><strong>출발 전(timeScale 0)에는 대원이 안 걷는다</strong> → 1장은 둘러보기 + [출발]뿐. 배치는 달리기 시작한 뒤.</li>
+<li>MBTI 계산·연구 트리 구조는 설명하지 않는다. 사람을 죽여서 가르치지 않는다.</li>
+<li>건너뛰기는 <strong>두 번 눌러야</strong> 한다.</li>
+</ul>
+<h2 id="3">사용자 결정 3건<a class="headerlink" href="#3" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>결정</th>
+<th>구현</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>대본 중 <strong>첫 위험구간 공세만 절반</strong></td>
+<td><code>TutorialState.HalveNextWave</code> → <code>EnemySpawner.OnZoneChanged</code> 가 한 번 소비</td>
+</tr>
+<tr>
+<td>2</td>
+<td>탐색대가 밖에 있는 동안 <strong>[출발] 잠금</strong>(대본 중에만)</td>
+<td><code>TutorialState.DepartBlockReason</code> → <code>GameManager.ToggleRunState</code> 가 막고 이유를 알림</td>
+</tr>
+<tr>
+<td>3</td>
+<td>6장은 스트레스 45 를 기다리되 <strong>5분 안에 안 오면 그냥 시작</strong></td>
+<td>6장 0단계 <code>_chapterClock &gt;= 300</code></td>
+</tr>
+</tbody>
+</table>
+<p>그 밖에 대본 중 <strong>선택 사건 카드 보류</strong>(<code>DecisionCardDirector</code>). 게임 규칙 쪽 스위치는 이 넷뿐이다.</p>
+<h2 id="_2">여섯 장<a class="headerlink" href="#_2" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>장</th>
+<th>할 일 (링 대상)</th>
+<th>완료 판정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 출발</td>
+<td>대원 한 명 클릭(대원) → 출발</td>
+<td><code>OnCrewSelected</code> · <code>HasDeparted</code></td>
+</tr>
+<tr>
+<td>2 일손</td>
+<td>노는 대원을 설비로 드래그(설비 + 점 경로) → 도착 보기 → 연료·식량·전력 칸 [다음으로]</td>
+<td><code>OnCrewOrderedToSlot</code> · 슬롯 점유</td>
+</tr>
+<tr>
+<td>3 세우고, 내보낸다</td>
+<td>레이더 로케이션 칸 → [정차] → [탐색대] → 대원 카드/[파견] → [무전] → 복귀 → 결과창</td>
+<td><code>CurrentSite</code> · <code>IsStopped</code> · <code>IsActive</code> · <code>ReportPending</code></td>
+</tr>
+<tr>
+<td>4 첫 공세</td>
+<td>[출발] → 위험구간이 3칸 안이면 레이더 칸 → 교전 끝까지</td>
+<td><code>OnZoneChanged(Red)</code> · 적 0 + 8초</td>
+</tr>
+<tr>
+<td>5 연구</td>
+<td>[연구] 칸 → '부품 탐사' 슬롯 → 연구 포인트 확인(살 수 있으면 [연구])</td>
+<td><code>ResearchUI.IsOpen/IsDetailOpen</code> · <code>TotalPoints</code></td>
+</tr>
+<tr>
+<td>6 쉴 곳</td>
+<td>가장 지친 대원 → 빈 방 → 탭 → 타일 + [설치] → 확인</td>
+<td><code>OnCrewSelected</code> · 설치창 · 휴식 설비 수</td>
+</tr>
+</tbody>
+</table>
+<h3 id="play-2026-09-18">Play 실측으로 바뀐 것 (2026-09-18)<a class="headerlink" href="#play-2026-09-18" title="Permanent link"> ¶</a></h3>
+<ul>
+<li><strong>시작 열차엔 빈 작업 설비가 없다</strong>(재배기엔 이미 사람, 제작대는 레시피 없음) → 2장은 작업 설비가 없으면 수면실 등 사람을 받는 설비로 안내.</li>
+<li><strong>'위협도 분석'은 2단</strong>(선행 부품 탐사 · 단 문턱 연구 6회)이고 <strong>시작 연구 포인트 0</strong>(분석 데스크 없음) → 5장은 "연구 1회"가 아니라 <strong>연구창 읽기 + 포인트는 분석 데스크에서</strong>.</li>
+<li><strong>휴게시설 6종이 시작 시 전부 연구로 잠겨 있다</strong> → 6장은 열린 휴게시설이 없으면 [거주·의료] 탭 → 수면실.</li>
+</ul>
+<h2 id="11-firstsightcards">처음 볼 때 카드 11종 (<code>FirstSightCards</code>)<a class="headerlink" href="#11-firstsightcards" title="Permanent link"> ¶</a></h2>
+<p>장기 정차(150초) · 경계구간(연구 후) · 전력 차단 · 붕괴 경보 · 선택 사건 · 경고 휴식 · 칸 체력 50% · 구조 신호 · 상위 재료 · 2층 증축 가능 · 첫 사망.
+각 카드에 <strong>[어디인지 보기]</strong> — 해결할 곳을 5초간 링으로 밝힌다. 판마다 종류당 1회, 세이브에 실린다. 설정 &gt; 게임 &gt; '처음 보는 상황 안내'로 끌 수 있다.</p>
+<h2 id="_3">구조<a class="headerlink" href="#_3" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UI/OnboardingDirector.cs</code></td>
+<td>대본(클래스 이름은 씬 참조 때문에 유지). 틱 0.2초, 단계마다 aim/done/back/manual</td>
+</tr>
+<tr>
+<td><code>UI/TutorialOverlay.cs</code></td>
+<td>링·딤·드래그 점·안내 카드. 자체 캔버스(정렬 95)</td>
+</tr>
+<tr>
+<td><code>UI/TutorialAnchor.cs</code></td>
+<td>버튼 이름표 레지스트리(만드는 쪽이 <code>Tag</code>)</td>
+</tr>
+<tr>
+<td><code>UI/FirstSightCards.cs</code></td>
+<td>처음 볼 때 카드</td>
+</tr>
+<tr>
+<td><code>Core/TutorialState.cs</code></td>
+<td>규칙 스위치 + 세이브(<code>SaveData.tutorial</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">남은 검증<a class="headerlink" href="#_4" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>탐색 복귀(실시간 약 3분)·첫 위험구간 실전 통과를 <strong>포커스 준 Game View 에서 끝까지</strong> 돌려 보지 못했다(에디터 비포커스라 프레임이 거의 안 흘렀다). 각 단계는 리플렉션으로 넘기며 화면·판정을 확인했다.</li>
+<li>튜토리얼 도중 저장 → 이어하기 복원은 직렬화 왕복만 확인했다.</li>
+</ul></article><p class="meta">기획과 실제 구현 상태는 각 문서의 기준일과 상태 표시를 확인해 주세요.</p></main></body></html>

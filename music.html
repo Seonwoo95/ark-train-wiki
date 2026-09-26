@@ -1,0 +1,240 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BGM 설계 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획_BGM_재설계_2026-09-16.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<ul>
+<li><a href="#bgm">방주 열차 BGM 재설계 — 생활에서 위기로, 다시 생활로</a><ul>
+<li><a href="#0-1">0. 사용자 추가 지시와 1차 적용 범위</a></li>
+<li><a href="#1">1. 참고 영상과 적용 방향</a></li>
+<li><a href="#2">2. 현재 구조에서 바꿀 것</a></li>
+<li><a href="#3">3. 음악의 성격</a></li>
+<li><a href="#4">4. 한 테마를 이루는 악기 층</a></li>
+<li><a href="#5">5. 게임 상태와 음악 반응</a></li>
+<li><a href="#6">6. 전환의 구체적인 소리</a></li>
+<li><a href="#7">7. 음원 제작 명세</a></li>
+<li><a href="#8-unity">8. Unity 구현 설계</a></li>
+<li><a href="#9">9. 제작·적용 순서와 통과 기준</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="bgm">방주 열차 BGM 재설계 — 생활에서 위기로, 다시 생활로<a class="headerlink" href="#bgm" title="Permanent link"> ¶</a></h1>
+<p>작성: 2026-09-16. 상태: 1차 수직 레이어링·신규 음원 적용, Unity 기능 검증 완료 / 청취 평가 미완료.</p>
+<h2 id="0-1">0. 사용자 추가 지시와 1차 적용 범위<a class="headerlink" href="#0-1" title="Permanent link"> ¶</a></h2>
+<p><strong>평상시에도 어느 정도 긴장감을 유지한다.</strong> 안전한 주행·정차·타이틀에도 낮은 반복음과 억제된 타악을 남긴다. 아래 최초 설계의 '생활의 온기'는 긴장 속의 인간적인 요소이며, 편안하고 위협 없는 음악을 뜻하지 않는다. 밤에도 저역의 경계감은 유지한다.</p>
+<p>1차 구현은 새 ACE-Step 원곡 한 개를 실제로 분리한 <strong>배경·베이스·타악 3층</strong>이다. 다섯 악기를 정밀 제어하는 원래 설계와 구별한다. 같은 샘플 수와 시작 시각을 유지하며, 상태마다 음량을 바꾸는 수직 레이어링을 먼저 적용한다. 독립 작곡한 연결 구절·A/B/C 변주·사망 악구는 이번 음원에 포함하지 않는다. 게임오버는 기존 memorial 곡으로 전환한다.</p>
+<p>생성 모델에 지정한 80 BPM은 보장값이 아니다. 타악 온셋으로 추정한 그리드와 실제 루프 샘플 수를 <code>Resources/Bgm/Adaptive/score.json</code>에 함께 기록한다. 자동 추정한 박자·마디 시작과 루프 화성은 청취 확정 전이며, 아래 80 BPM/48kHz 명세보다 현재 제작물의 메타데이터가 우선한다.</p>
+<h2 id="1">1. 참고 영상과 적용 방향<a class="headerlink" href="#1" title="Permanent link"> ¶</a></h2>
+<p>참고: 저세상개발자, <a href="https://www.youtube.com/watch?v=WkvlFYUlvns">게임 음악에 사용되는 신기한 전환 기법</a>.
+영상 메타데이터와 한국어 자동 자막으로 내용을 확인했다. 영상의 실제 음악을 청취·비교한 것은 아니며, 자동 자막의 고유명사 오인식은 인용하지 않는다.</p>
+<p>영상에서 설명하는 두 구조를 적용한다. 같은 음악에 악기 층을 더해 상황에 반응하는 <strong>수직 레이어링</strong>, 호환되는 구절과 전환 구절을 연결하는 <strong>수평 재구성</strong>이다. 아래 악기·속도·화성·전환 수치는 영상의 수치가 아니라 방주 열차를 위한 새 설계다.</p>
+<p>게임의 중심은 생존자들의 생활이다. 음악도 <strong>작은 공동체의 온기 → 바깥의 위협 → 공동체를 지키는 긴장 → 살아남은 뒤의 안도</strong>를 따라간다. 전투가 끝나도 같은 사람들의 이야기가 이어지는 느낌을 만든다.</p>
+<h2 id="2">2. 현재 구조에서 바꿀 것<a class="headerlink" href="#2" title="Permanent link"> ¶</a></h2>
+<p>코드 확인 기준: <code>Tools/bgm_gen.py</code>, <code>Assets/ArkTrain/Scripts/Audio/Bgm.cs</code>, <code>Assets/ArkTrain/Editor/Art/BgmImporter.cs</code>.</p>
+<table>
+<thead>
+<tr>
+<th>현재 확인된 구조</th>
+<th>한계</th>
+<th>새 설계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>기타 주행곡·드론 야간곡·오케스트라 전투곡을 각각 생성</td>
+<td>공통 조성·구절·동기를 보장하지 못함</td>
+<td>하나의 작곡 세션에서 상태별 편곡 제작</td>
+</tr>
+<tr>
+<td>새 곡을 <code>Play()</code>로 처음부터 재생</td>
+<td>상황 변화마다 도입부로 돌아감</td>
+<td>같은 재생 위치를 유지하고 악기만 증감</td>
+</tr>
+<tr>
+<td>1.2초 또는 3초 음량 교차</td>
+<td>박자와 화성의 연결을 보장하지 못함</td>
+<td>마디 경계와 작곡된 전환 지점 사용</td>
+</tr>
+<tr>
+<td>모든 일반 상태 변경에 20초 최소 유지</td>
+<td>전투 진입도 최대 약 20초 지연 가능</td>
+<td>위험 상승은 빠르게, 해제는 천천히</td>
+</tr>
+<tr>
+<td>밤이면 별도 곡으로 교체</td>
+<td>시간대 변화가 음악 흐름을 새로 시작시킴</td>
+<td>생활 악기의 음색·밀도를 바꿈</td>
+</tr>
+<tr>
+<td>공통 태그에서 박·리듬을 광범위하게 금지</td>
+<td>조용한 추진력까지 제한</td>
+<td>낮은 밀도의 반복 음형 허용</td>
+</tr>
+</tbody>
+</table>
+<p>위 내용은 코드·생성 조건에 대한 진단이다. 기존 여섯 음원의 청취 평가를 대신하지 않는다. 음량을 줄이거나 랜덤 시드를 바꾸는 것만으로 재설계를 완료했다고 판단하지 않는다.</p>
+<h2 id="3">3. 음악의 성격<a class="headerlink" href="#3" title="Permanent link"> ¶</a></h2>
+<p><strong>넓고 차가운 황무지 속, 사람이 사는 작은 열차.</strong> 공간은 넓되 잔향이 모든 음을 흐리지 않게 한다. 가까운 악기 하나와 먼 배경 층의 거리 차이를 둔다.</p>
+<ul>
+<li>생활의 중심: 부드러운 펠트 피아노 또는 약음 나일론 기타. 첫 시안은 피아노 중심으로 통일한다.</li>
+<li>세계의 바탕: 얇고 따뜻한 신스 패드, 낮은 현의 긴 음. SF 질감은 배경에 둔다.</li>
+<li>기억할 요소: 짧은 3~4음 동기 하나. 계속 반복하지 않고 구절 사이에 여백을 둔다.</li>
+<li>주행감: 낮은 현이나 부드러운 펄스의 성긴 반복. 실제 엔진·주행 효과음과 역할을 나눈다.</li>
+<li>위협: 저음 반복과 불안정한 음정으로 압박을 만든다. 볼륨 상승에만 의존하지 않는다.</li>
+<li>전투: 같은 동기를 낮은 현과 절제된 타악으로 편곡한다. 상시 심벌·큰 금관·록 드럼은 배제한다.</li>
+<li>야간: 높은 음의 수와 어택을 줄인다. 안전한 밤에는 적막 속 온기가 남는다.</li>
+<li>상실: 짧고 담백한 피아노·첼로. 대원 한 명의 사망마다 전체 음악을 추도곡으로 교체하지 않는다.</li>
+</ul>
+<p>초기 작곡 기준은 <strong>80 BPM, 4/4, D minor 계열</strong>로 둔다. 1마디 3초, 8마디 24초, 16마디 48초다. 이는 제작 그리드이며 드럼을 강제로 넣으라는 뜻이 아니다. 청취 후 변경할 수 있지만 한 세트의 모든 층과 연결 구절은 함께 바꾼다.</p>
+<h2 id="4">4. 한 테마를 이루는 악기 층<a class="headerlink" href="#4" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>층</th>
+<th>역할</th>
+<th>구성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bed</td>
+<td>공동체와 세계의 연속성</td>
+<td>얇은 패드와 저음 화성</td>
+</tr>
+<tr>
+<td>Home</td>
+<td>생활의 온기</td>
+<td>펠트 피아노, 간헐적인 짧은 동기</td>
+</tr>
+<tr>
+<td>Motion</td>
+<td>움직임</td>
+<td>부드러운 저역 반복 음형</td>
+</tr>
+<tr>
+<td>Threat</td>
+<td>바깥의 위험</td>
+<td>낮은 현, 긴장 음정, 건조한 질감</td>
+</tr>
+<tr>
+<td>Combat</td>
+<td>방어의 압력</td>
+<td>절제된 저역 타악과 현 악센트</td>
+</tr>
+</tbody>
+</table>
+<p>각 층은 <strong>같은 시작점·마디 수·화성 진행·샘플 수</strong>를 공유하는 스템이다. 낮/밤마다 독립 음악을 만들지 않는다. 야간은 Home과 Motion을 덜어내고 Bed를 남기는 믹스로 표현한다.</p>
+<p>먼저 16마디 A 한 세트를 완성한다. 이후 호환되는 B·C 세트를 추가한다. A/B/C의 입출구 화성을 작곡 단계에서 맞추고, 허용된 연결만 선택한다. 첫 버전은 A→B→A→C처럼 검증 가능한 순서로 시작한다. 무작위로 곡을 자르고 붙이지 않는다.</p>
+<h2 id="5">5. 게임 상태와 음악 반응<a class="headerlink" href="#5" title="Permanent link"> ¶</a></h2>
+<p>아래 강도는 편곡 의도다. 최종 볼륨 계수는 모든 층을 합쳐 듣고 결정한다.</p>
+<table>
+<thead>
+<tr>
+<th>상황</th>
+<th>음악 반응</th>
+<th>진입·해제 규칙</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>출발 준비·안전한 정차</td>
+<td>Bed + Home, Motion 약하게 또는 없음</td>
+<td>생활 구절 유지</td>
+</tr>
+<tr>
+<td>안전한 주행</td>
+<td>Bed + Home + 약한 Motion</td>
+<td>다음 마디부터 1마디에 걸쳐 변화</td>
+</tr>
+<tr>
+<td>안전한 밤</td>
+<td>Bed 중심, Home의 일부만 남김</td>
+<td>다음 4마디 경계부터 완만히 변화</td>
+</tr>
+<tr>
+<td>Yellow/Red, 교전 없음</td>
+<td>Threat 추가, Home 감소</td>
+<td>다음 마디 진입; Red에서 밀도만 더 높임</td>
+</tr>
+<tr>
+<td>실제 교전</td>
+<td>Combat 추가, Threat 유지</td>
+<td>20초 유지 제한을 무시하고 다음 마디 진입</td>
+</tr>
+<tr>
+<td>교전 해제</td>
+<td>Combat 제거 → Threat 완화 → Home 복귀</td>
+<td>기존 <code>CombatActive</code> 해제 후 2마디에 걸쳐 복귀</td>
+</tr>
+<tr>
+<td>붕괴 위험, 교전 없음</td>
+<td>Home 감소, Threat 약하게 추가</td>
+<td>위험 해제는 2마디 안정 확인 후 복귀</td>
+</tr>
+<tr>
+<td>대원 사망</td>
+<td>짧은 상실 악구, 기존 층 일부 감쇠</td>
+<td>다음 박 진입; 전투 중에는 알림 효과음 우선</td>
+</tr>
+<tr>
+<td>게임오버</td>
+<td>예약 전환 취소, 상실 종결 구절</td>
+<td>즉시 약 1초 감쇠 후 종결; 일반 유지 제한 없음</td>
+</tr>
+</tbody>
+</table>
+<p>우선순위: 게임오버 &gt; 교전 &gt; 구역 위험·붕괴 위험 &gt; 주행·정차 &gt; 시간대. 밤이라는 이유로 위험 신호를 지우지 않는다. 사망 악구는 별도 사건 반응으로 취급한다. 15초 안의 연속 사망은 중첩 재생하지 않는다.</p>
+<p><code>EnemySpawner.CombatActive</code>는 마지막 적 소멸 후 기본 8초 유지가 이미 있다. 음악에서 다시 긴 대기 시간을 더하지 않는다. 회복 구간 플래그만으로 전투 음악을 해제하지 않으며 잔여 적과 실제 교전 상태를 우선한다.</p>
+<p>위험 알림 효과음은 즉시 재생되는 기존 역할을 유지한다. 음악은 다음 마디까지 최대 약 3초 기다릴 수 있으므로 유일한 경고 수단이 되어서는 안 된다.</p>
+<h2 id="6">6. 전환의 구체적인 소리<a class="headerlink" href="#6" title="Permanent link"> ¶</a></h2>
+<p>생활→위험→전투는 기본적으로 레이어를 증감한다. Bed의 재생 위치는 계속 흐른다. 적이 나타날 때마다 새로운 도입부나 전환 효과를 재생하지 않는다.</p>
+<p>큰 구절 변경에는 연결 음악을 쓴다. 전투에서 생활로 돌아올 때 1마디의 짧은 해결 구절을 두어 긴장을 풀고, 다음 생활 구절로 이어간다. 해결 구절 도중 적이 다시 나타나면 생활 진입 예약을 취소하고 다음 마디에 전투 층을 복구한다. 연결 구절의 화성도 재진입 가능하게 작곡한다.</p>
+<p>예시: 안전 주행에서 피아노가 들림 → 위험 구역 진입 시 다음 마디에 낮은 현이 붙음 → 교전 시 다음 마디부터 절제된 타악이 들어옴 → 적 소멸 후 기존 경계 유지가 끝남 → 타악이 2마디 동안 빠짐 → 해결 구절 → 같은 동기의 생활 편곡으로 복귀.</p>
+<p>일시정지 중 음악은 같은 속도로 흐르고 상태 전환 판단은 동결한다. 재개 시 최신 게임 상태로 한 번 다시 판단한다. 게임 배속은 음악의 템포·피치를 바꾸지 않는다. 음량 0에서도 음악 시계는 유지한다.</p>
+<h2 id="7">7. 음원 제작 명세<a class="headerlink" href="#7" title="Permanent link"> ¶</a></h2>
+<p>첫 납품 범위는 A 세트 5개 스템, 1마디 복귀 연결 구절, 짧은 사망 악구, 게임오버 종결 구절이다. A 세트로 청취와 전환을 검증한 다음 B·C 및 타이틀 편곡을 만든다.</p>
+<ul>
+<li>원본: 48kHz / 24-bit WAV. 16마디 본체는 48초, 2,304,000 샘플 프레임으로 통일한다.</li>
+<li>모든 스템을 같은 세션의 같은 시간 범위에서 내보낸다. 무음인 부분도 시간을 보존한다.</li>
+<li>루프용 잔향은 루프 안으로 감아 넣고, 다른 구절로 넘어갈 때 필요한 별도 잔향 꼬리는 메타데이터로 구분한다.</li>
+<li>스템별 피크·LUFS 자동 정규화 금지. 합산했을 때의 밸런스와 헤드룸을 먼저 맞춘다.</li>
+<li>초기 합산 목표: 생활 약 -23~-20 LUFS-I, 전투 약 -21~-18 LUFS-I, 최대 조합 true peak -1 dBTP 이하. 숫자는 출발점이며 게임 효과음과 함께 청취해 확정한다.</li>
+<li>독립 곡용 꼬리→머리 크로스페이드 가공을 스템마다 따로 적용하지 않는다. 마디 길이와 위상 관계가 틀어질 수 있다.</li>
+<li>파일별 메타데이터: family, section, stem, bpm, beatsPerBar, bars, sampleRate, sampleCount, entry/exit, gain, 허용 후속 section.</li>
+</ul>
+<p><strong>현 <code>bgm_gen.py</code>는 질감·작곡 시안 제작에만 사용한다.</strong> 같은 프롬프트·BPM·시드로 따로 생성한 곡들을 겹친다고 정합 스템이 되지는 않는다. 단일 편곡을 멀티트랙으로 제작·내보내는 경로가 필요하다. AI 스테레오 결과를 분리한 스템도 누출음과 위상을 청취 검증해야 한다.</p>
+<p>제작 여건상 정합 스템을 확보하지 못하면 동일 작곡에서 나온 calm/threat/combat 전체 믹스 3종을 같은 그리드로 내보내는 대안을 쓴다. 서로 다른 생성곡에 BPM만 기입하는 방식은 대안이 아니다.</p>
+<p>시안용 음악 지시문:</p>
+<blockquote>
+<p>Instrumental score for a small surviving community aboard a futuristic ark train. Intimate felt piano, a restrained recurring motif, warm thin synth bed, distant low strings, spacious but clear. Quiet forward motion, human warmth against a cold landscape. Sparse arrangement with breathing room. No vocals, no triumphant brass, no rock drums, no constant cymbals. Build danger through low-register tension and restrained rhythmic density while preserving the theme.</p>
+</blockquote>
+<p>이 문장은 음색 시안 지시문이며 스템 동기화·정확한 마디 길이를 보장하지 않는다.</p>
+<h2 id="8-unity">8. Unity 구현 설계<a class="headerlink" href="#8-unity" title="Permanent link"> ¶</a></h2>
+<p>기존 <code>Bgm</code>의 외부 음량 API를 유지하고 내부를 상태 판단, 음악 시간표, 스템 믹싱으로 나눈다. 게임플레이 코드 여러 곳에 음악 재생 호출을 추가하지 않는다.</p>
+<ul>
+<li>상태 판단: 기존 구역·시간대·게임오버 이벤트와 <code>CombatActive</code> 사용. <code>OnCollapseRisk</code>·<code>OnCrewDied</code>는 기존 이벤트를 구독한다. 이동 상태는 <code>TrainMovement</code>의 실제 공개 상태를 확인해 연결한다.</li>
+<li>음악 시간표: <code>AudioSettings.dspTime</code>을 기준으로 다음 박·마디를 계산하고 <code>AudioSource.PlayScheduled</code>로 예약한다. Unity 공식 문서는 DSP 시간 기반 예약 재생을 제공한다. <a href="https://docs.unity3d.com/6000.0/Documentation/ScriptReference/AudioSource.PlayScheduled.html">공식 API 문서</a></li>
+<li>동일 세트의 스템은 같은 DSP 시점에 시작해 음량 0인 층도 같은 위치를 유지한다. 구절 교체용 두 뱅크로 다음 세트를 미리 준비한다. 첫 구성의 최대 예산은 5층×2뱅크 + 사건 악구 1소스다.</li>
+<li>재생 준비 여유는 초기 0.25초로 설정하고 실측한다. 예약 가능 시간을 지난 경계는 건너뛴다. 스트리밍 준비 지연 시 현재 구절을 유지하고 다음 경계로 재예약한다.</li>
+<li>프레임의 <code>Update()</code>는 상태 관찰·음량 보간만 맡고 재생 시작의 정확한 시간은 DSP 예약이 맡는다. 예약의 취소·교체에는 세대 번호를 두어 오래된 상태가 나중에 재생되지 않게 한다.</li>
+<li>현재 단계의 믹스 계수에서 새 목표로 보간한다. 전환 도중 새 요청이 들어와도 음량을 0/1로 초기화하지 않는다.</li>
+<li>같은 원본과 상관성이 높은 믹스를 겹칠 때는 선형 교차부터 검증한다. 모든 전환에 equal-power를 고정 적용하면 중간 지점에서 레벨이 커질 수 있다.</li>
+<li>새 파일은 모두 검증·준비된 뒤에만 활성 세트로 교체한다. 누락 시 기존 재생을 유지하고 진단을 한 번 남긴다.</li>
+<li>씬 종료·비활성화 시 예약과 소스를 정리하고 이벤트를 해제한다. 도메인 리로드 없는 재시작도 기존 프로젝트 규칙에 따라 초기화한다.</li>
+</ul>
+<p><code>BgmImporter</code>의 기존 독립곡 Streaming 규칙을 모든 스템에 그대로 확장하지 않는다. 동시 스트리밍·압축 해제 CPU·메모리를 비교해 로드 방식을 정한다. 48초 스테레오 48kHz 스템 5개의 float PCM 환산은 약 88MiB, 두 세트는 약 176MiB이므로 전체 세트 일괄 상주는 피한다. 실제 Unity 메모리·디코더 비용은 프로파일링한다.</p>
+<h2 id="9">9. 제작·적용 순서와 통과 기준<a class="headerlink" href="#9" title="Permanent link"> ¶</a></h2>
+<ol>
+<li><strong>A 세트 음악 제작:</strong> 생활·위험·전투 합산 믹스와 연결 구절을 먼저 만든다. 같은 동기가 들리고 전투가 과하게 웅장하지 않은지 청취한다.</li>
+<li><strong>독립 전환 시연:</strong> 생활→위험→전투→복귀→밤을 약 3분에 담는다. 전환 위치를 표시한 버전과 표시 없는 버전을 비교한다.</li>
+<li><strong>런타임 적용:</strong> 음악 시간표와 두 뱅크를 구현하고 기존 음량 설정·타이틀 진입·게임오버 흐름을 연결한다.</li>
+<li><strong>게임 속 검증:</strong> 짧은 교전 반복, 위험 구역의 밤, 전투 중 사망, 전환 도중 게임오버, 일시정지·배속, 음소거·복원, 저장 불러오기, Play 두 번 진입을 확인한다.</li>
+<li><strong>변주 확장:</strong> 첫 세트가 통과한 뒤 B·C를 만들어 20~30분 동안 효과음과 함께 반복 청취한다.</li>
+</ol>
+<p>완료 기준:</p>
+<ul>
+<li>박과 마디가 밀리지 않고 전환·루프에서 클릭·무음 틈·갑작스러운 음량 상승이 없다.</li>
+<li>위험 상승은 다음 예약 가능한 마디에서 반영되고 20초 유지 규칙에 막히지 않는다.</li>
+<li>짧은 적 재등장에 생활/전투가 반복 왕복하지 않는다.</li>
+<li>모든 활성 층을 합쳐도 피크 기준을 지키고 경고·총격·UI 효과음을 가리지 않는다.</li>
+<li>밤·교전·상실이 구별되면서 같은 게임의 음악으로 들린다.</li>
+<li>파일 길이·샘플 수 자동 검사와 실제 청취를 모두 통과한다. 파형·수치 검사만으로 음악 품질을 통과 처리하지 않는다.</li>
+</ul>
+<p>최초 설계 이후 사용자의 진행 지시로 음원 제작과 재생 코드 적용에 착수했다. 현재 구현 범위와 제한은 0절, 실측 결과는 <code>Docs/Work/Bgm0916</code>의 보고서를 따른다.</p></article><p class="meta">기획과 실제 구현 상태는 각 문서의 기준일과 상태 표시를 확인해 주세요.</p></main></body></html>

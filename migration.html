@@ -1,0 +1,248 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>기획 개정 이관표 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: Docs/기획개정_이관표_2026-09-08.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<ul>
+<li><a href="#_1">기획 개정 구현 이관표</a><ul>
+<li><a href="#1">1. 순서와 변경 위치</a></li>
+<li><a href="#2">2. 저장 호환과 기존 연구</a></li>
+<li><a href="#3">3. 현행 규칙 정리 시 확인한 주의점</a></li>
+<li><a href="#4">4. 문서 적용 관계</a></li>
+<li><a href="#5">5. 이번 문서 작업의 확인 범위</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="_1">기획 개정 구현 이관표<a class="headerlink" href="#_1" title="Permanent link"> ¶</a></h1>
+<p>작성일: 2026-09-08 / 기준: <a href="design.html">통합 기획서 2.0</a></p>
+<p>이번 작업은 문서만 변경했다. 아래 항목은 전부 미구현이며, 기존 기능이 있는 곳은 그 기능을 수정한다. 숫자는 본문에만 정의하고 여기서 중복 관리하지 않는다.</p>
+<blockquote>
+<p>⚠️ <strong>2026-09-08 갱신 — 위 문장은 더 이상 전부 참이 아니다.</strong>
+D01·D02·D03·D04·D07 은 코드에 반영했다(컴파일 0 오류 · Play 확인). 상태는 <strong>🔎 코덱스 검토 필요</strong>다 —
+사람이 규칙 해석·초안 수치·저장 호환을 확인한 뒤에 '완료'로 바꾼다. 아래 표의 '진행' 열을 보라.
+<strong>2026-09-09 갱신 2 — D05 · D06 · D08 · D09 도 코드에 반영했다</strong>(컴파일 0 오류 · Play 실측).
+상태는 역시 <strong>🔎 코덱스 검토 필요</strong>다. 이관표의 미구현 항목은 이제 <strong>없다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>진행</th>
+<th>실제로 들어간 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D05</td>
+<td>🔎 검토 필요</td>
+<td><code>MentalBreakdown</code> 에 경고 휴식 상태기계(80 이상 10초 → 발행 / 60 이하 해제 · 재발행 금지 / 100 도달 시 10초 위기 유예, <strong>경고를 이미 겪었으면 유예 없음</strong>) · <code>CrewAI.TickWarningRest</code>(일·포탑 자동 배치 중단, 맞는 휴게실 우선 이동, 없으면 제자리 정지 — 자동 해소 없음) · <code>TrainGrid/TrainCar.FindLoungeSlot</code>(적합 우선 2패스) · 경보에 원인·목적지(<code>StressLedger.TopRisingLabel</code>) · 세이브 5필드(재로드로 유예 재발급 불가). 곁가지 둘: <strong>네온 바가 <code>IsWorkFurniture</code> 에서 빠져 있어 자율 배정이 안 되던 버그</strong>, 휴게실을 생산 설비보다 먼저 잡던 배정 순서(이제 2차 패스)</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>🔎 검토 필요</td>
+<td><code>CrewChronicle</code>(3칸·첫 합류 고정·중복 ID 차단) + <code>CrewController.Chronicle/RecordEvent</code> · 훅 4곳(합류 / 탐색 구조 참여 <strong>팀 전원</strong> / 붕괴 생존 / KIA 응급 구조) · <code>CrewSave.events</code>·<code>MemorialSave.events</code> · 위령비는 <strong>값 사본</strong>만 본다 · 대원 정보창 '주요 이력' 3줄 · 구 세이브는 '기록 이전 합류'</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>🔎 검토 필요</td>
+<td><code>RadarScanner</code> 에 회복 구간(레드 실교전 30초 누적 → 주행 중 적 0 이면 예약 → 다음 구간을 회복 그린 45초) · <strong>정차 중에도 잔여 소모</strong> · 종료 시 재발동 거리 +1km · 외부에서 위협이 들어오면(강제 공세) 즉시 종료 · <code>EnemySpawner</code> 자연 스폰만 억제(정차 압박은 예외) · <code>SaveData.radar</code>(구역·트랙·예약·잔여·재발동 거리)</td>
+</tr>
+<tr>
+<td>D09</td>
+<td>🔎 검토 필요</td>
+<td><code>LifeGoals</code>(5종 · 비트마스크 · 보상 없음 · 취소 없음 · 생존 1명 이상) + <code>LifeGoalRunner</code>(1초 틱, 씬 배치 없음) · '안정된 하루'는 사망/붕괴/굶주림 피해에 리셋 · 통계 창에 <strong>다음 목표 하나 + 달성 기록</strong> 두 줄 · 세이브는 완료 마스크와 진행 초만 · 봇에 <strong>침대 지정</strong>(ThinkBedAssignment) 추가 — 안 넣으면 '모두의 잠자리'가 자동 검증에서 영영 미달성이다</td>
+</tr>
+</tbody>
+</table>
+<p>남은 미구현은 <strong>없다</strong>(옛 문장: D05 · D06 · D08 · D09).</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>진행</th>
+<th>실제로 들어간 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D04</td>
+<td>🔎 검토 필요</td>
+<td><code>StressLedger</code>(원인 15종·지속/충격 구분)는 이미 있었고, <strong>대원 정보창 표시가 빠져 있었다</strong> → 스트레스 게이지 아래 순변화 + 상위 3원인. 행 높이를 줄 수만큼 직접 잡는다(안 그러면 아래 행에 겹친다)</td>
+</tr>
+<tr>
+<td>D01</td>
+<td>🔎 검토 필요</td>
+<td><code>NpcInfoUI</code> 의 <code>ResearchTier</code> 게이팅 제거(지정은 처음부터) · <code>ResearchTree.BED</code> "지정 침대" → <strong>"고급 침실"</strong>(캡슐 수면실 해금) · <code>WORKPLACE</code> 는 <code>ResearchTree.IsRetired</code> 로 폐기(Id·노드 정의는 구 세이브 보존용으로 남김) · 연구 트리 UI·봇 목록에서 제외</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>🔎 검토 필요</td>
+<td>T형의 40초 상승 잠금을 <strong>기계까지</strong> 걷어냄(<code>CrewStats._stressLock</code>·<code>ApplyStressLock</code>·<code>TrainCar.ApplyTSocialTick</code> 삭제) · <code>TrainCar.HasCalmAnchor</code> + <code>CrewMBTI.ApplyCompanionCalm</code>(−0.04/초, 비중첩, 자기 제외, 붕괴자 제외)</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>🔎 검토 필요</td>
+<td>상태 기반 조화(50 기준·에너지/스트레스 −10·안정 F형 +5)와 <strong>1회 10초</strong> 지연 상한이 이미 코드에 있었다. 이번엔 성향 상극 판정의 죽은 변수만 정리</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>🔎 검토 필요</td>
+<td><code>ScoutPurposeRules</code>·<code>Dispatch(purpose)</code> 는 있었으나 <strong>UI 가 목적을 넘기지 않았고 <code>FreezeMission</code> 이 아예 없어 프로젝트가 컴파일되지 않았다.</strong> 파견창에 목적 3종 구획(배율 표시·인원 상한 시 구조 비활성)을 넣고, <code>FreezeMission</code> 으로 구역·연구 레벨·회수·생존자 발견을 <strong>파견 시점에 고정</strong>. ⛔ 저장 복원은 아직 없다</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="1">1. 순서와 변경 위치<a class="headerlink" href="#1" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>ID</th>
+<th>변경 위치</th>
+<th>필요한 작업</th>
+<th>완료 기준</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>D04</td>
+<td>CrewStats, CrewMBTI, LoungeBase, NpcInfoUI</td>
+<td>스트레스 변경 원인 전달·실제 적용량 집계·상위 원인 표시</td>
+<td>과밀 해소, 잠금, 기질 배율, 순간 충격을 실제 값과 일치하게 표시</td>
+</tr>
+<tr>
+<td>2</td>
+<td>D01</td>
+<td>CrewAI, NpcInfoUI, ResearchTree, ResearchUnlockManager</td>
+<td>배정 잠금 해제·캡슐 침대 연구 분리·생활 복귀 보존</td>
+<td>새 게임에서 배정 가능, 식사·휴식·전투 후 기본 배정 보존</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D05</td>
+<td>CrewAI, CrewStats, MentalBreakdown, Consumables, LoungeBase, EventCardUI, SaveData</td>
+<td>경고 휴식·최초 위기 유예·재경고 조건·진행 상태 저장·진정제와 휴게 효과의 붕괴 대상 제외</td>
+<td>경고 휴식 중 자동 매닝 차단, 충격에 대응 기회, 재로드 유예 악용 불가, 예방 효과로 붕괴 진정 우회 불가</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D02</td>
+<td>CrewMBTI, TrainCar, CrewAI</td>
+<td>T형 타인 스트레스 잠금 제거·F형 비중첩 안정 효과</td>
+<td>자기 적용·중첩·붕괴 치료가 없고 실제 원인으로 표시</td>
+</tr>
+<tr>
+<td>5</td>
+<td>D03</td>
+<td>ScoutTeamData, ExplorationManager, ScoutDispatchUI</td>
+<td>성향 상극 감점 제거·상태 기반 조화·실제 지연 상한</td>
+<td>편성 프리뷰와 실제 계산 일치, 지연 반복 불가</td>
+</tr>
+<tr>
+<td>6</td>
+<td>D06</td>
+<td>CrewController, ExplorationManager, MentalBreakdown, Infirmary, MemorialBoard, SaveData</td>
+<td>실제 사건 시 이력 생성·3개 제한·위령비 복사</td>
+<td>합류 고정, 사건 중복 없음, 삭제 객체 참조 없음, 저장 왕복 보존</td>
+</tr>
+<tr>
+<td>7</td>
+<td>D07</td>
+<td>ScoutDispatchUI, ScoutTeamData, ScoutReport, ExplorationManager, SaveData</td>
+<td>목적 선택·배율·상한·파견 스냅샷·복귀 결과</td>
+<td>미해금 자원 지급 없음, 구 진행 탐색은 기존 배율로 완료</td>
+</tr>
+<tr>
+<td>8</td>
+<td>D08</td>
+<td>EnemySpawner, RadarScanner, GameManager, SonarForecastUI, SaveData</td>
+<td>교전 누적·회복 예약·다음 구역 적용·재발동 제한</td>
+<td>실제 적 제거 없음, 압박 공세 우선, 정차·재로드로 시간 연장 불가</td>
+</tr>
+<tr>
+<td>9</td>
+<td>D09</td>
+<td>StatsUI 또는 대원 개요 UI, GameEvents, SaveData</td>
+<td>목표 판정·완료 ID·현재 필요와 완료 기록 분리</td>
+<td>보상 없음, 완료 중복 없음, 신규 인원으로 완료 취소 없음</td>
+</tr>
+</tbody>
+</table>
+<p>D05는 D04의 원인 정보와 함께 검증한다. D07은 D03의 시간·조화 계산을 사용한다. D08은 파견 중 시간 흐름과 함께 검증한다. 기존 Debug 자동 플레이도 신규 배정·경고·탐색 목적을 이해하도록 해당 단계에서 갱신한다.</p>
+<h2 id="2">2. 저장 호환과 기존 연구<a class="headerlink" href="#2" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>새 enum 값은 뒤에 추가한다. 기존 직렬화 순서를 바꾸거나 폐기 항목의 숫자를 다른 뜻으로 재사용하지 않는다.</li>
+<li>기본 배정을 열어도 기존 PinnedBed/PinnedWork 참조는 보존한다. 슬롯이 사라진 경우만 기존 해제 규칙을 따른다.</li>
+<li>기존 지정 침대 연구 ID는 고급 침실 해금으로 이어받는다. 캡슐 침대 접근이 구 세이브에서 사라지지 않게 한다.</li>
+<li>지정 작업장 연구 ID는 호환 기록으로만 남기고 신규 구매 목록에서 제외한다. 선행 조건으로 참조하는 곳을 전수 확인한다. 과거 지출 환불은 이번 범위에 넣지 않는다.</li>
+<li>경고의 경과 시간, 이미 제공한 유예, 재발행 가능 여부를 저장한다. 구 세이브에 필드가 없으면 신규 규칙의 최초 진입 상태로 한 번 초기화한다.</li>
+<li>사건 이력은 종류·날짜·이름 스냅샷·중복 방지 ID를 저장한다. 구 세이브의 알려지지 않은 사건은 생성하지 않는다.</li>
+<li>진행 중 탐색은 구 버전에서 목적이 없으면 기존 배율로 마무리한다. 신규 파견부터 목적 선택을 적용한다.</li>
+<li>회복 예약·잔여 시간·마지막 발동 거리와 생활 목표 완료·진행 정보를 저장한다.</li>
+<li>변경 시점의 구조를 SaveData에 명시하고 실제 저장 버전 처리와 결합한다. 이 문서 작성만으로 버전 번호를 올리지 않는다.</li>
+</ul>
+<h2 id="3">3. 현행 규칙 정리 시 확인한 주의점<a class="headerlink" href="#3" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>유지할 기준</th>
+<th>잘못 되살리기 쉬운 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전력</td>
+<td>PowerGrid의 초과 시 10% 규칙</td>
+<td>출력/부하에 따른 완만한 감소</td>
+</tr>
+<tr>
+<td>발전기</td>
+<td>기본 출력 20kW</td>
+<td>옛 12kW</td>
+</tr>
+<tr>
+<td>휴게</td>
+<td>LoungeBase와 세 라운지, 저전력 회복 하한</td>
+<td>모래 정원 완치, 네 종류 휴게실</td>
+</tr>
+<tr>
+<td>의료</td>
+<td>Infirmary의 체력·골절 회복, KIA에 한정한 응급 구조</td>
+<td>모든 종류의 사망을 막는 시설</td>
+</tr>
+<tr>
+<td>드론</td>
+<td>OnCrewWorking을 통한 유인 관제</td>
+<td>무인·확정 탐색</td>
+</tr>
+<tr>
+<td>회수 사다리</td>
+<td>코어도 전문 탐색에서 샘플 획득</td>
+<td>코어 탐색 금지</td>
+</tr>
+<tr>
+<td>자원 정제</td>
+<td>연구와 제작대의 정제 유지</td>
+<td>승급 전면 금지</td>
+</tr>
+<tr>
+<td>설계도·원재료</td>
+<td>목표 경제에서 폐기</td>
+<td>enum에 남았으므로 신규 수급 가능하다고 판단</td>
+</tr>
+<tr>
+<td>게임 종료</td>
+<td>동력코어 또는 대원 전멸</td>
+<td>전 객차가 부서져야 종료</td>
+</tr>
+</tbody>
+</table>
+<p>현재 코드의 주석에도 오래된 설명이 남아 있다. 구현 단계에서 동작을 확인한 뒤 주변 주석을 함께 정리한다. 이번 문서 작업에서 게임 파일을 일괄 수정하지 않는다.</p>
+<h2 id="4">4. 문서 적용 관계<a class="headerlink" href="#4" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>기획서.md: 목표 규칙과 초안 수치의 기준.</li>
+<li>플레이흐름가이드.md: 위 규칙을 플레이어가 경험하는 순서.</li>
+<li>본 문서: 미구현 항목과 변경 지점의 체크리스트.</li>
+<li>Docs/Archive의 두 보존본: 개정 직전 원문. 과거 장 번호와 역사적 수치를 찾을 때만 사용.</li>
+<li>계획_제작연구업그레이드.md, 설비목록_및_확장안.md, HANDOVER.md 등: 과거 검토·작업 기록. 현재 규칙과 충돌하면 통합 기획서를 따른다.</li>
+</ul>
+<h2 id="5">5. 이번 문서 작업의 확인 범위<a class="headerlink" href="#5" title="Permanent link"> ¶</a></h2>
+<p>기획서와 플레이 흐름 가이드의 개정 전 원문을 해시가 같은 복사본으로 보존했다. 신규 규칙과 현재 구현을 구분하고, 구현 경로·문서 링크·변경 ID를 정합성 확인 대상으로 삼는다. 런타임 동작·밸런스·씬 초기값 검증은 코드 반영 단계에서 수행한다.</p></article><p class="meta">기획과 실제 구현 상태는 각 문서의 기준일과 상태 표시를 확인해 주세요.</p></main></body></html>

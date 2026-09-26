@@ -1,0 +1,988 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>사건 카드 위키 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획_사건카드_위키.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<ul>
+<li><a href="#21-2026-09-23">사건 카드 위키 — 전 21종 (2026-09-23 기준)</a><ul>
+<li><a href="#0">0. 한눈에</a><ul>
+<li><a href="#_1">카드 공통 규칙 (어기면 그건 카드가 아니다)</a></li>
+<li><a href="#_2">표기</a></li>
+</ul>
+</li>
+<li><a href="#1-6">1. 사람 — 6종</a><ul>
+<li><a href="#1-quarrel">1. 말다툼 Quarrel</a></li>
+<li><a href="#2-nightshift-2026-09-23">2. 밤샘 자원 NightShift — 🔄 2026-09-23 개조</a></li>
+<li><a href="#3-memorial">3. 빈자리 Memorial</a></li>
+<li><a href="#4-birthday">4. 생일 Birthday</a></li>
+<li><a href="#5-noise">5. 소음 민원 Noise</a></li>
+<li><a href="#6-gambling">6. 밤 도박판 Gambling</a></li>
+</ul>
+</li>
+<li><a href="#2-2">2. 합류 — 2종</a><ul>
+<li><a href="#7-stowaway-2026-09-23-tf">7. 밀항자 Stowaway — 🔄 2026-09-23 개조 (T/F)</a></li>
+<li><a href="#8-wounded">8. 업고 온 사람 Wounded</a></li>
+</ul>
+</li>
+<li><a href="#3-5">3. 설비 · 자원 — 5종</a><ul>
+<li><a href="#9-datacore">9. 구세계 데이터 조각 DataCore</a></li>
+<li><a href="#10-breaker">10. 차단기 과열 Breaker</a></li>
+<li><a href="#11-fueltaint">11. 연료 오염 FuelTaint</a></li>
+<li><a href="#12-foodspoil">12. 식량 변질 FoodSpoil</a></li>
+<li><a href="#13-enginenoise">13. 기관 이상음 EngineNoise</a></li>
+</ul>
+</li>
+<li><a href="#4-2">4. 전투 — 2종</a><ul>
+<li><a href="#14-ammodefect">14. 탄약 결함 AmmoDefect</a></li>
+<li><a href="#15-hullcrack">15. 외벽 균열 HullCrack</a></li>
+</ul>
+</li>
+<li><a href="#5-6-2026-09-23">5. 🆕 누구를 보낼 것인가 — 신설 6종 (2026-09-23)</a><ul>
+<li><a href="#16-repairduty-sn">16. 정비 당번 RepairDuty — S/N</a></li>
+<li><a href="#17-gunduty-tf">17. 포문 당번 GunDuty — T/F</a></li>
+<li><a href="#18-mentor-sn">18. 신입 교육 Mentor — S/N</a></li>
+<li><a href="#19-reconcile">19. 화해 자리 Reconcile — 관계</a></li>
+<li><a href="#20-parley-ei">20. 교섭 Parley — E/I</a></li>
+<li><a href="#21-roster-jp">21. 당직 순번 Roster — J/P</a></li>
+</ul>
+</li>
+<li><a href="#6">6. 발동 조건 요약표</a></li>
+<li><a href="#7">7. 삽화</a></li>
+<li><a href="#8">8. 카드를 새로 만들 때 손댈 곳</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="21-2026-09-23">사건 카드 위키 — 전 21종 (2026-09-23 기준)<a class="headerlink" href="#21-2026-09-23" title="Permanent link"> ¶</a></h1>
+<blockquote>
+<p><strong>이 문서는 "지금 게임에 들어 있는 카드가 정확히 무엇을 하는가"의 단일 참조표다.</strong>
+설계 의도와 규칙의 원문은 <code>기획_선택사건카드.md</code>, 구현은 <code>Scripts/Core/DecisionCardDirector.cs</code>
+(발동·정의) + <code>Scripts/Core/DecisionCardEffects.cs</code>(시간 잠금·배수) + <code>Scripts/UI/DecisionCardUI.cs</code>(창).</p>
+<p>🛑 <strong>수치를 고칠 때는 코드와 이 표를 같이 고친다.</strong> 둘이 갈라지면 이 문서가 거짓말을 시작하고,
+그 순간부터 아무도 이 표를 믿지 않게 된다.</p>
+</blockquote>
+<hr />
+<h2 id="0">0. 한눈에<a class="headerlink" href="#0" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>축</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전체 카드</td>
+<td><strong>21종</strong> (<code>DecisionCardId.Count</code> = 21)</td>
+</tr>
+<tr>
+<td>유형</td>
+<td>자원·시간을 치르는 것 + <strong>사람을 고르는 8종</strong>(2026-09-23) — 신설 6 · 개조 2</td>
+</tr>
+<tr>
+<td>성향 축</td>
+<td><strong>네 축 전부가 한 번씩 기준이 된다</strong> — S/N 정비·신입 / T/F 포문·밀항자 / E/I 교섭 / J/P 당직 / 관계 화해·밤샘</td>
+</tr>
+<tr>
+<td>쿨타임</td>
+<td>전체 공통 · <strong>거리</strong> 1,200~2,500km 무작위 (첫 카드 600~1,200km). 정차 중에는 흐르지 않는다</td>
+</tr>
+<tr>
+<td>발동 굴림</td>
+<td>쿨타임이 끝나면 <strong>5초마다 25%</strong>, 조건이 선 카드들 중 <strong>균등 무작위 한 장</strong></td>
+</tr>
+<tr>
+<td>동시 표시</td>
+<td>1장. 교전 중 · 탐색 결과창이 열린 동안 · 튜토리얼 대본 중에는 굴리지 않는다</td>
+</tr>
+<tr>
+<td>응답 시간</td>
+<td><strong>없다.</strong> 카드가 뜨면 <code>GameSpeed</code> 가 세계를 멈춘다. X·Esc = <strong>마지막 선택지</strong></td>
+</tr>
+<tr>
+<td>봇</td>
+<td><code>AutoPlayDirector.ThinkDecisionCard</code> 가 <strong>반드시 고른다</strong> — 안 고르면 무인 주행이 굳는다</td>
+</tr>
+<tr>
+<td>세이브</td>
+<td><code>SaveData.decisionCards</code> (다음 카드 거리 · 진행 중 잠금/배수 · 마지막 생일 일수)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_1">카드 공통 규칙 (어기면 그건 카드가 아니다)<a class="headerlink" href="#_1" title="Permanent link"> ¶</a></h3>
+<ol>
+<li><strong>장소에 걸지 않는다</strong> — 발동은 열차 안 상태나 이미 일어난 사건만 본다. 달리든 서든 같은 조건에 뜬다.</li>
+<li><strong>대가는 누르는 순간 치른다</strong> — 자원·스트레스·체력은 그 프레임에 적용된다.</li>
+<li><strong>시간이 걸리는 대가는 카드가 직접 잠근다</strong> — "정차해야 한다"처럼 플레이어가 지켜 줘야 성립하는 대가는 금지.</li>
+<li><strong>원인을 화면에 쓰지 않는다</strong> — 본문은 장면만. 단, 선택지의 <strong>결과는 반드시 쓴다</strong>(모르고 고르면 도박이다).</li>
+<li><strong>정답이 없어야 한다</strong> — 선택지마다 <strong>서로 다른 축</strong>으로 대가를 치른다.</li>
+<li><strong>사람을 죽이지 않는다</strong> — 부상은 체력 1 에서, 동력코어·칸도 1 에서 멈춘다.</li>
+<li><strong>새 자원·새 수치를 만들지 않는다.</strong></li>
+</ol>
+<h3 id="_2">표기<a class="headerlink" href="#_2" title="Permanent link"> ¶</a></h3>
+<ul>
+<li><strong>[즉시]</strong> 누르는 순간 적용 · <strong>[N시간]</strong> 게임 시간 N동안 지속(게임 1시간 = 실시간 37.5초)</li>
+<li><strong>[잠금]</strong> 플레이어가 풀 수 없다 — 대원은 작업·포탑 불가, 설비는 다시 켤 수 없다</li>
+<li>재료 표기의 부품·합금은 <strong>아직 그 등급을 가져 본 적이 없으면 같은 양의 아래 등급</strong>으로 청구된다(<code>Mat</code>)</li>
+</ul>
+<hr />
+<h2 id="1-6">1. 사람 — 6종<a class="headerlink" href="#1-6" title="Permanent link"> ¶</a></h2>
+<h3 id="1-quarrel">1. 말다툼 <code>Quarrel</code><a class="headerlink" href="#1-quarrel" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p>두 사람의 언성이 칸 밖까지 들린다. 누군가 끼어들지 않으면 주먹이 오갈 것 같다.</p>
+</blockquote>
+<p><strong>발동</strong> 한 칸 안에 스트레스 60 이상인 대원이 둘, 게임 2시간 지속 · 대원 3명 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>진정제를 쓴다</td>
+<td>진정제 1</td>
+<td>두 사람 스트레스 −35</td>
+</tr>
+<tr>
+<td>2</td>
+<td>중재 맡기기: <em>이름</em></td>
+<td>—</td>
+<td>중재자 <strong>[잠금 3시간]</strong> · 중재자 +15 · 두 사람 −20</td>
+</tr>
+<tr>
+<td>3</td>
+<td>내버려 둔다</td>
+<td>—</td>
+<td>한 사람 체력 −30 · 두 사람 +10</td>
+</tr>
+</tbody>
+</table>
+<p><em>중재자는 F형 우선, 가장 덜 지친 사람이 자동으로 뽑힌다.</em></p>
+<h3 id="2-nightshift-2026-09-23">2. 밤샘 자원 <code>NightShift</code> — 🔄 2026-09-23 개조<a class="headerlink" href="#2-nightshift-2026-09-23" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>{이름}</em> — "거의 다 풀렸어요. 오늘 밤만 붙잡고 있게 해 주세요."</p>
+</blockquote>
+<p><strong>발동</strong> 22~02시 · 분석 데스크 근무 중 · 그 대원 에너지 50 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>밤새 하게 둔다</td>
+<td>RP +120 · 그 대원 에너지 0 · 스트레스 +20</td>
+</tr>
+<tr>
+<td>2</td>
+<td>🆕 <strong>한 명 더 붙인다: <em>이름</em></strong></td>
+<td>RP <strong>+200</strong> · <strong>두 사람</strong> 에너지 0 · 각각 +20 · <strong>둘의 관계 +30</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>재운다</td>
+<td><strong>J형이면 +10 · P형이면 −5</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>2번의 진짜 대가는 관계가 아니라 </em><em>아침에 두 사람이 동시에 바닥난다</em><em>는 것이다. 붙일 사람이 없으면 이 줄은 나오지 않는다.</em></p>
+<h3 id="3-memorial">3. 빈자리 <code>Memorial</code><a class="headerlink" href="#3-memorial" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 대원 사망 후 게임 1시간 이내 · 대원 2명 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>추모식을 연다</td>
+<td>전 대원 <strong>[잠금 2시간]</strong>(작업·포탑) · 전원 −25</td>
+</tr>
+<tr>
+<td>2</td>
+<td>짧게 묵념한다</td>
+<td>전원 −8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>일을 계속한다</td>
+<td><strong>F형 +15 · T형 −5</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-birthday">4. 생일 <code>Birthday</code><a class="headerlink" href="#4-birthday" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 지난 생일 카드로부터 7일 경과 · 대원 2명 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>잔치를 연다</td>
+<td>식량 15</td>
+<td>전원 −20 · 당사자 추가 −20</td>
+</tr>
+<tr>
+<td>2</td>
+<td>조촐하게 챙긴다</td>
+<td>식량 5</td>
+<td>당사자 −15</td>
+</tr>
+<tr>
+<td>3</td>
+<td>모른 척한다</td>
+<td>—</td>
+<td>당사자 +10 · <strong>F형 +5</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-noise">5. 소음 민원 <code>Noise</code><a class="headerlink" href="#5-noise" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> I형의 가장 큰 스트레스 원인이 <strong>과밀 또는 다인실</strong>인 상태가 게임 6시간 지속</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>칸막이를 친다</td>
+<td>부품 25</td>
+<td><strong>I형 마주침 스트레스 −50% [48시간]</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>휴게 시간을 나눈다</td>
+<td>—</td>
+<td><strong>E형 휴게 해소 −30% [24시간]</strong> · I형 −15</td>
+</tr>
+<tr>
+<td>3</td>
+<td>참으라고 한다</td>
+<td>—</td>
+<td>I형 +10</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-gambling">6. 밤 도박판 <code>Gambling</code><a class="headerlink" href="#6-gambling" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 대원 6명 이상 · 휴게 설비 2개 이상 · 20~02시</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>눈감아 준다</td>
+<td>—</td>
+<td>전원 −15 · 식량이나 부품 10 소실(굴림)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>판돈을 대 준다</td>
+<td>식량 20</td>
+<td>전원 −20 · 무작위 1명 에너지 −30</td>
+</tr>
+<tr>
+<td>3</td>
+<td>금지한다</td>
+<td>—</td>
+<td><strong>E형·P형 +12</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-2">2. 합류 — 2종<a class="headerlink" href="#2-2" title="Permanent link"> ¶</a></h2>
+<h3 id="7-stowaway-2026-09-23-tf">7. 밀항자 <code>Stowaway</code> — 🔄 2026-09-23 개조 (<strong>T/F</strong>)<a class="headerlink" href="#7-stowaway-2026-09-23-tf" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 5일차 이후 하루 15% 굴림 · 대원 12명 미만</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>🆕 심문 맡기기: <em>이름</em> <strong>(T형)</strong></td>
+<td>식량 10</td>
+<td>합류 · <strong>부품 +15</strong>(숨긴 물자 위치) · 밀항자 <strong>+25</strong> · 그 대원 [잠금 2시간]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>🆕 사정을 들어준다: <em>이름</em> <strong>(F형)</strong></td>
+<td>식량 10</td>
+<td>합류 · <strong>스트레스 0 에서 시작</strong> · <strong>둘의 관계 +45</strong> · 그 대원 [잠금 2시간]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>내보낸다</td>
+<td>—</td>
+<td><strong>F형 +10</strong></td>
+</tr>
+</tbody>
+</table>
+<p>🛑 <strong>후보 둘을 못 구하면 옛 두 선택지로 되돌아간다</strong>(받아들인다 / 일꾼으로만 태운다).
+이 카드는 성향 카드이기 <strong>전에</strong> 밀항자 카드다 — 조건을 빡빡하게 걸어 원래 있던 사건이 사라지게 두지 않는다.
+⚠️ 합류는 기본 스트레스 20 을 달고 오므로, 2번은 <strong>0 으로 덮어써야</strong> "스트레스 없이 시작한다"가 참이 된다(실측으로 걸렸다).</p>
+<h3 id="8-wounded">8. 업고 온 사람 <code>Wounded</code><a class="headerlink" href="#8-wounded" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 탐색대 복귀 시 12% (1시간 유효) — <em>생존자 발견과는 별개다</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>받아들인다</td>
+<td>식량 10</td>
+<td><strong>골절 상태</strong> 대원 1명 합류(체력 30)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>치료만 해서 보낸다</td>
+<td>부품 15 · 식량 5</td>
+<td><strong>F형 −10</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>돌려보낸다</td>
+<td>—</td>
+<td><strong>F형 +15</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-5">3. 설비 · 자원 — 5종<a class="headerlink" href="#3-5" title="Permanent link"> ¶</a></h2>
+<h3 id="9-datacore">9. 구세계 데이터 조각 <code>DataCore</code><a class="headerlink" href="#9-datacore" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 부품 이상 등급 로케이션 탐색 복귀 시 15% (1시간 유효)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>해독한다</td>
+<td>분석 데스크 전부 <strong>[잠금 8시간]</strong> → 끝나면 <strong>수치 연구 1단계 무료</strong>(이미 최대인 축 제외)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>분해한다</td>
+<td>합금 +12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>버린다</td>
+<td>아무 일도 없다</td>
+</tr>
+</tbody>
+</table>
+<h3 id="10-breaker">10. 차단기 과열 <code>Breaker</code><a class="headerlink" href="#10-breaker" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 전력 부하가 출력의 90% 이상인 상태가 게임 1시간 지속</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>과부하 셀을 꽂는다</td>
+<td>과부하 셀 1</td>
+<td>발전 출력 +10% [6시간]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>가동 중지: <em>가장 부하 큰 설비</em></td>
+<td>—</td>
+<td>그 설비 <strong>[잠금 6시간]</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>버틴다</td>
+<td>—</td>
+<td>30% 확률로 <strong>발전 출력 −50% [1시간]</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="11-fueltaint">11. 연료 오염 <code>FuelTaint</code><a class="headerlink" href="#11-fueltaint" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 하루 25% 굴림 · 연료 100 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>걸러 낸다</td>
+<td>합금 10</td>
+<td>손실 없음</td>
+</tr>
+<tr>
+<td>2</td>
+<td>오염분을 버린다</td>
+<td>—</td>
+<td>연료 −20%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>그대로 태운다</td>
+<td>—</td>
+<td><strong>발전기 연료 소모 +25% [12시간]</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-foodspoil">12. 식량 변질 <code>FoodSpoil</code><a class="headerlink" href="#12-foodspoil" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 하루 30% 굴림 · 식량 ≥ 인원 × 15</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>변질분을 버린다</td>
+<td>식량 −30%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>재가공한다</td>
+<td>조리대 전부 <strong>[잠금 6시간]</strong> · 식량 −10%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>그냥 먹인다</td>
+<td><strong>다음 배급 3번 동안 끼니마다 전원 체력 −5</strong> (배급은 06·12·18시 정시라 피할 수 없다)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-enginenoise">13. 기관 이상음 <code>EngineNoise</code><a class="headerlink" href="#13-enginenoise" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 고속 단계로 게임 12시간 연속 주행 · 동력코어 존재</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>저속으로 점검한다</td>
+<td>—</td>
+<td><strong>속도 저속 고정 [6시간]</strong> · 동력코어 체력 +20%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>점검 보내기: <em>이름</em></td>
+<td>부품 15</td>
+<td>그 대원 <strong>[잠금 4시간]</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>무시한다</td>
+<td>—</td>
+<td>40% 확률로 동력코어 체력 −15%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-2">4. 전투 — 2종<a class="headerlink" href="#4-2" title="Permanent link"> ¶</a></h2>
+<h3 id="14-ammodefect">14. 탄약 결함 <code>AmmoDefect</code><a class="headerlink" href="#14-ammodefect" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 교전 종료 시 25% 굴림 (1시간 유효) · 포탑 1기 이상</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>전 포탑을 점검한다</td>
+<td>합금 15</td>
+<td>포탑 연사 +10% [24시간]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>불량탄 골라내기: <em>이름</em></td>
+<td>—</td>
+<td>그 대원 <strong>[잠금 3시간]</strong> · 그 밖의 효과 없음</td>
+</tr>
+<tr>
+<td>3</td>
+<td>그대로 쓴다</td>
+<td>—</td>
+<td><strong>포탑 피해 −15% [12시간]</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="15-hullcrack">15. 외벽 균열 <code>HullCrack</code><a class="headerlink" href="#15-hullcrack" title="Permanent link"> ¶</a></h3>
+<p><strong>발동</strong> 비전투 중 칸 체력 50% 미만이 게임 2시간 지속</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>비용</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>합금으로 땜질한다</td>
+<td>합금 20</td>
+<td>그 칸 체력 +40%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>대원이 수리한다</td>
+<td>부품 20</td>
+<td>그 칸 체력 +40% · 그 대원 <strong>[잠금 4시간]</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>둔다</td>
+<td>—</td>
+<td>그 칸 체력 −20%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-6-2026-09-23">5. 🆕 누구를 보낼 것인가 — 신설 6종 (2026-09-23)<a class="headerlink" href="#5-6-2026-09-23" title="Permanent link"> ¶</a></h2>
+<blockquote>
+<p>같은 유형의 <strong>개조 2종</strong>은 원래 자리에 있다 — 2 밤샘 자원(관계) · 7 밀항자(T/F).</p>
+<p><strong>앞의 15종과 묻는 것이 다르다.</strong> 저쪽은 <em>무엇을 치를 것인가</em>(자원·시간)이고,
+이쪽은 <strong><em>누구를 쓸 것인가</em></strong>다. 선택지 1·2 가 사람 이름으로 나오고, 결과는 그 사람의 성향이 정한다.</p>
+<p>🛑 <strong>후보는 늘 성향이 갈리는 두 사람이다</strong>(<code>PickContrast</code>). 각 편에서 <strong>가장 덜 지친 사람</strong>이 뽑힌다 —
+"가장 잘하는 사람"을 뽑으면 매번 같은 얼굴이 나와서 카드가 한 사람의 전담 업무가 된다.
+양쪽을 대표할 사람이 없으면(전원이 같은 성향이거나, 잠겼거나, 붕괴 중이면) <strong>그 카드는 아예 발동하지 않는다.</strong></p>
+<p>🛑 <strong>라벨에는 4축 코드만 쓴다</strong> — 히든 축(A/T)이 여기로 새면 '심리 프로파일' 연구가 이미 아는 것을 다시 파는 일이 된다.</p>
+<p>🛑 <strong>마지막 선택지는 늘 '안 보낸다'</strong> — X·Esc 가 그리로 떨어지므로, 닫는 문이 사람을 묶어 버리면 안 된다.</p>
+</blockquote>
+<h3 id="16-repairduty-sn">16. 정비 당번 <code>RepairDuty</code> — <strong>S/N</strong><a class="headerlink" href="#16-repairduty-sn" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>{설비} 에서 자꾸 소리가 난다. 공구는 있다. 누가 잡을지만 정하면 된다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 비전투 · 체력 70% 미만인 <strong>설비</strong>가 있다 · S/N 후보 둘
+<em>(칸은 '외벽 균열'이 맡는다 — 같은 대상을 두 카드가 물면 어느 쪽이 떴는지에 따라 값이 달라진다.)</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>이름</em> <strong>(S형)</strong></td>
+<td>그 설비 <strong>60% 수리</strong> · 그 대원 [잠금 3시간]</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>이름</em> <strong>(N형)</strong></td>
+<td>그 설비 <strong>30% 수리</strong> + <strong>원인까지 찾아낸다(RP +90)</strong> · 그 대원 [잠금 5시간]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>지금은 둔다</td>
+<td>그 설비 체력 −20%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>고르는 이유</strong> S형은 지금 당장 고치고 빠진다. N형은 덜 고치는 대신 연구를 남기고 더 오래 묶인다.</p>
+<h3 id="17-gunduty-tf">17. 포문 당번 <code>GunDuty</code> — <strong>T/F</strong><a class="headerlink" href="#17-gunduty-tf" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>포신이 아직 뜨겁다. 다음 것이 오기 전에 누군가는 올라가 앉아 있어야 한다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 교전 종료 후 1시간 이내 · 포탑 1기 이상 · T/F 후보 둘</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>이름</em> <strong>(T형)</strong></td>
+<td>[잠금 6시간] · 본인 +10 · <strong>전 포탑 연사 +12% [6시간]</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>이름</em> <strong>(F형)</strong></td>
+<td>[잠금 6시간] · 본인 <strong>+25</strong> · <strong>나머지 전원 −10</strong> · 전 포탑 연사 +12% [6시간]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>아무도 붙이지 않는다</td>
+<td><strong>전 포탑 연사 −10% [6시간]</strong></td>
+</tr>
+</tbody>
+</table>
+<p>🛑 <strong>둘의 사격 성능은 똑같다.</strong> 갈라지는 것은 대가뿐이다 — 성능을 가르면 "T형만 포탑"으로 굳어
+누굴 올릴지가 결정이 아니게 된다. F형은 자기가 더 비싸게 치르는 대신 <strong>남은 사람들을 안심시킨다.</strong></p>
+<h3 id="18-mentor-sn">18. 신입 교육 <code>Mentor</code> — <strong>S/N</strong><a class="headerlink" href="#18-mentor-sn" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>{신입} — 아직 어디에 뭐가 있는지도 모른다. 누가 데리고 다닐지 정해야 한다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 새 대원 합류 후 게임 12시간 이내 · 대원 4명 이상 · S/N 후보 둘
+<em>(시작 대원 넷은 <code>OnCrewJoined</code> 를 타지 않으므로 이 카드를 띄우지 않는다.)</em></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>이름</em> <strong>(S형)</strong></td>
+<td>멘토 [잠금 3시간] · 신입 −20 · <strong>둘의 관계 +60</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>이름</em> <strong>(N형)</strong></td>
+<td>멘토 [잠금 3시간] · 신입 −20 · <strong>둘의 관계 +60</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>알아서 배우게 둔다</td>
+<td>신입 +15 · 아무도 묶이지 않는다</td>
+</tr>
+</tbody>
+</table>
+<p><strong>고르는 이유</strong> 즉각적인 차이는 없다 — 고르는 것은 <strong>누구와 누구를 엮을 것인가</strong>다.
+멘토와 신입은 그 뒤로 같은 칸에 있는 것이 서로에게 이득이 된다([[관계]]).
+⚠️ 관계가 이미 앙금이던 쌍은 +60 이 <strong>앙금을 메우는 데 먼저 쓰인다</strong> — 그 경우 '가까운 사이'까지 못 갈 수 있다.</p>
+<h3 id="19-reconcile">19. 화해 자리 <code>Reconcile</code> — <strong>관계</strong><a class="headerlink" href="#19-reconcile" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>{A} · {B} — 서로를 피해 다닌 지 오래됐다. 좁은 열차에서 그건 오래 못 간다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 열차 위에 관계 <strong>−40 이하</strong>인 쌍이 있다 (<code>CrewBonds.TryWorstPair</code>)</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>자리를 마련한다 — <em>중재자</em></td>
+<td>중재자 [잠금 3시간] · 중재자 +12 · <strong>관계 +70</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>당분간 떼어 놓는다</td>
+<td>두 사람 [잠금 2시간] · 둘 다 −10 · <strong>관계 +25</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>둔다</td>
+<td>둘 다 +12 · <strong>관계 −15</strong></td>
+</tr>
+</tbody>
+</table>
+<p><em>중재자는 F형 우선, 가장 덜 지친 사람. 없으면 1번이 잠긴다("중재할 사람이 없다").</em></p>
+<h3 id="20-parley-ei">20. 교섭 <code>Parley</code> — <strong>E/I</strong><a class="headerlink" href="#20-parley-ei" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>선로 옆 폐허에서 불빛이 깜빡인다. 사람이다. 셋쯤 된다. 총은 보이지 않는다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 하루 25% 굴림 · 대원 3명 이상 · E/I 후보 둘</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>이름</em> <strong>(E형)</strong></td>
+<td><strong>고철 +60 · 부품 +10</strong> · [잠금 <strong>5시간</strong>] · 본인 −10</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>이름</em> <strong>(I형)</strong></td>
+<td>고철 +30 · [잠금 <strong>2시간</strong>] · 본인 <strong>+10</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>지나친다</td>
+<td>아무 일도 없다 · <strong>E형 전원 +5</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>고르는 이유</strong> 한쪽이 모든 축에서 이기면 안 된다 — E형은 많이 벌어 오지만 <strong>오래 붙잡혀 있고</strong>,
+I형은 빨리 돌아오지만 적게 가져온다. 본인이 치르는 스트레스도 반대다(E형은 풀리고 I형은 깎인다).</p>
+<h3 id="21-roster-jp">21. 당직 순번 <code>Roster</code> — <strong>J/P</strong><a class="headerlink" href="#21-roster-jp" title="Permanent link"> ¶</a></h3>
+<blockquote>
+<p><em>밤사이 누가 깨어 있을지 아무도 정하지 않았다. 어젯밤엔 아무도 안 깨어 있었다.</em></p>
+</blockquote>
+<p><strong>발동</strong> 하루 25% 굴림 · 대원 5명 이상 · J/P 후보 둘</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선택지</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>이름</em> <strong>(J형)</strong></td>
+<td>[잠금 3시간] · <strong>전원 −12</strong> · 단 <strong>P형은 +8</strong>(순 −4)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>이름</em> <strong>(P형)</strong></td>
+<td>[잠금 2시간] · <strong>전원 −6</strong> · 단 <strong>J형은 +8</strong>(순 +2)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>각자 알아서 하게 둔다</td>
+<td>전원 <strong>+6</strong></td>
+</tr>
+</tbody>
+</table>
+<p>🛑 이 카드는 <strong>고르는 사람과 받는 사람 양쪽</strong>에 같은 축이 작용한다 — 그래서 답이
+<strong>열차의 J/P 구성에 따라 바뀐다.</strong> 정답이 고정되지 않는 유일한 형태다.</p>
+<hr />
+<h2 id="6">6. 발동 조건 요약표<a class="headerlink" href="#6" title="Permanent link"> ¶</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>카드</th>
+<th>방아쇠</th>
+<th>되돌림(<code>ResetTrigger</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>말다툼</td>
+<td>한 칸 스트레스 60↑ 둘 · 2시간</td>
+<td>누적 0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>밤샘 자원</td>
+<td>22~02시 · 데스크 근무 · 에너지 50↑</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3</td>
+<td>빈자리</td>
+<td>사망 후 1시간</td>
+<td>사망 시각</td>
+</tr>
+<tr>
+<td>4</td>
+<td>생일</td>
+<td>지난 생일 후 7일</td>
+<td>오늘로 갱신</td>
+</tr>
+<tr>
+<td>5</td>
+<td>소음 민원</td>
+<td>I형 원인 1위가 과밀·다인실 · 6시간</td>
+<td>누적 0</td>
+</tr>
+<tr>
+<td>6</td>
+<td>밤 도박판</td>
+<td>대원 6↑ · 휴게 2↑ · 20~02시</td>
+<td>—</td>
+</tr>
+<tr>
+<td>7</td>
+<td>밀항자</td>
+<td>5일차↑ · 하루 15% · 대원 12 미만</td>
+<td>오늘 굴림 취소</td>
+</tr>
+<tr>
+<td>8</td>
+<td>업고 온 사람</td>
+<td>탐색 복귀 12% (1시간)</td>
+<td>시각</td>
+</tr>
+<tr>
+<td>9</td>
+<td>데이터 조각</td>
+<td>부품↑ 로케이션 복귀 15% (1시간)</td>
+<td>시각</td>
+</tr>
+<tr>
+<td>10</td>
+<td>차단기 과열</td>
+<td>부하 ≥ 출력 90% · 1시간</td>
+<td>누적 0</td>
+</tr>
+<tr>
+<td>11</td>
+<td>연료 오염</td>
+<td>하루 25% · 연료 100↑</td>
+<td>오늘 굴림 취소</td>
+</tr>
+<tr>
+<td>12</td>
+<td>식량 변질</td>
+<td>하루 30% · 식량 ≥ 인원×15</td>
+<td>오늘 굴림 취소</td>
+</tr>
+<tr>
+<td>13</td>
+<td>기관 이상음</td>
+<td>고속 12시간 연속</td>
+<td>누적 0</td>
+</tr>
+<tr>
+<td>14</td>
+<td>탄약 결함</td>
+<td>교전 종료 25% (1시간)</td>
+<td>굴림 취소</td>
+</tr>
+<tr>
+<td>15</td>
+<td>외벽 균열</td>
+<td>비전투 · 칸 50% 미만 · 2시간</td>
+<td>누적 0</td>
+</tr>
+<tr>
+<td>16</td>
+<td>정비 당번</td>
+<td>설비 70% 미만 · S/N 후보</td>
+<td><strong>없음</strong>(상태가 방아쇠)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>포문 당번</td>
+<td>교전 종료 1시간 · 포탑 1↑ · T/F 후보</td>
+<td>교전 시각 + 탄약 굴림</td>
+</tr>
+<tr>
+<td>18</td>
+<td>신입 교육</td>
+<td>합류 12시간 · 대원 4↑ · S/N 후보</td>
+<td>신입 지움</td>
+</tr>
+<tr>
+<td>19</td>
+<td>화해 자리</td>
+<td>관계 −40 이하 쌍</td>
+<td><strong>없음</strong>(상태가 방아쇠)</td>
+</tr>
+<tr>
+<td>20</td>
+<td>교섭</td>
+<td>하루 25% · 대원 3↑ · E/I 후보</td>
+<td>오늘 굴림 취소</td>
+</tr>
+<tr>
+<td>21</td>
+<td>당직 순번</td>
+<td>하루 25% · 대원 5↑ · J/P 후보</td>
+<td>오늘 굴림 취소</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ <strong>16·19 는 내릴 타이머가 없다.</strong> 고르지 않고 미룬 일은 계속 남아 있어야 하므로,
+다시 뜨는 것은 공통 쿨타임만 막는다.
+⚠️ <strong>17 은 14 와 같은 방아쇠(교전 종료)를 쓴다</strong> — 하나가 뜨면 둘 다 내린다. 안 그러면 한 번의 교전으로 카드가 연달아 두 장 뜬다.</p>
+<hr />
+<h2 id="7">7. 삽화<a class="headerlink" href="#7" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>위치 <code>Assets/ArkTrain/Resources/DecisionCards/&lt;key&gt;.png</code> (960×640) · 생성 <code>Tools/decision_card_art.py</code></li>
+<li>파일이 없으면 <strong>카드는 정상 작동하고 그림 자리만 빈 판으로 나온다</strong>(예외·에러 없음).</li>
+<li>✅ <strong>21/21 전부 생성됨</strong>(2026-09-23). 다시 굽기: <code>python Tools/decision_card_art.py &lt;key&gt; [--seed N]</code>.
+  ComfyUI 는 <strong>Comfy Desktop</strong>(<code>%LOCALAPPDATA%\Comfy-Desktop\ComfyUI-Installs\ComfyUI</code>)이 8188 포트로
+  서비스하고, 체크포인트는 공유 폴더(<code>ComfyUI-Shared\models\checkpoints\sd_xl_base_1.0.safetensors</code>)에 있다.
+  🛑 동봉된 <code>standalone-env\python.exe</code> 로 <code>main.py</code> 를 직접 띄우면 <strong>torch 가 없어 즉시 죽는다</strong> — 데스크톱 앱을 쓴다.</li>
+<li>🛑 스타일 문구에 <strong>"train" 을 넣지 마라</strong> — 열차 외관이 주인공이 되어 사건 장면이 사라진다(1차에 15장 중 8장).</li>
+<li>🛑 '누구를 보낼 것인가' 4종의 장면에는 <strong>사람이 둘 이상 보여야 한다.</strong> 한 명만 그리면
+  고를 것이 없는 그림이 되어 본문과 따로 논다.</li>
+</ul>
+<hr />
+<h2 id="8">8. 카드를 새로 만들 때 손댈 곳<a class="headerlink" href="#8" title="Permanent link"> ¶</a></h2>
+<ol>
+<li><code>DecisionCardId</code> 에 <strong>끝에 추가</strong>(<code>Count</code> 앞) — 세이브가 순번을 쓰지는 않지만 로그·기록이 이름을 쓴다</li>
+<li><code>Eligible()</code> 에 발동 조건 한 줄</li>
+<li><code>Build()</code> 에 제목·본문·선택지 3개 (<code>MAX_OPTIONS = 3</code> 은 창의 하드 상한이다)</li>
+<li><code>ResetTrigger()</code> — 누적 타이머를 쓰는 카드만</li>
+<li><code>Tools/decision_card_art.py</code> 의 <code>CARDS</code> 에 장면 프롬프트</li>
+<li>한글 문구를 <code>Loc.T</code> / <code>Loc.F</code> 로 감싸고 → <code>python Tools/loc_check.py</code> → 번역 3개 언어 추가</li>
+<li><strong>봇이 고를 수 있는지 확인</strong> — 첫 번째로 고를 수 있는 선택지를 누른다. 전 선택지가 잠기면 안 된다</li>
+</ol>
+<p>🛑 <strong>선택지의 결과 문구와 실제 효과가 같은지 반드시 Play 로 확인한다.</strong> 스트레스는 <code>Stress()</code>(= <code>SetInitialStress</code>)
+로 바꿔야 <strong>적힌 숫자 그대로</strong> 들어간다 — <code>AddStress</code> 를 쓰면 기질 배율을 타서 "−20" 이 −30 이 된다(실측으로 걸렸다).</p>
+<p>🛑 <strong>이름 뒤에 받침을 타는 조사(을/를 · 이/가 · 과/와)를 쓰지 마라.</strong> 대원·설비 이름을 모르는 채로
+문장을 조립하므로 반드시 틀린다. <code>—</code> 나 <code>·</code> 로 끊거나 <code>에서</code>·<code>3시간 작업 불가</code> 처럼 조사가 필요 없는 형태로 쓴다.</p></article><p class="meta">기획과 실제 구현 상태는 각 문서의 기준일과 상태 표시를 확인해 주세요.</p></main></body></html>

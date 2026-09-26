@@ -1,0 +1,295 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>스팀 업적 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획_스팀업적.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<ul>
+<li><a href="#2026-09-17">스팀 업적 기획 (2026-09-17)</a><ul>
+<li><a href="#1">1. 결정</a><ul>
+<li><a href="#_1">폐지 시 손댈 곳 (구현 단계에서)</a></li>
+</ul>
+</li>
+<li><a href="#2-26">2. 업적 목록 (초안 26종)</a><ul>
+<li><a href="#_2">진행·거리</a></li>
+<li><a href="#5">공동체 (옛 생활 목표 5종 포함)</a></li>
+<li><a href="#_3">열차</a></li>
+<li><a href="#_4">전투</a></li>
+<li><a href="#_5">탐색·연구·사건</a></li>
+<li><a href="#_6">숨김</a></li>
+</ul>
+</li>
+<li><a href="#3">3. 구현 원칙 (연동 시)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="2026-09-17">스팀 업적 기획 (2026-09-17)<a class="headerlink" href="#2026-09-17" title="Permanent link"> ¶</a></h1>
+<blockquote>
+<p>출처: <code>콘텐츠량_점검_2026-09-17.md</code> 3절 4번 "중후반 생활 목표 3~5개" → 사용자 결정 "업적으로만 한다".
+상태: <strong>기획만</strong>. Steamworks 미연동 · 코드 변경 0.</p>
+</blockquote>
+<h2 id="1">1. 결정<a class="headerlink" href="#1" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>🛑 <strong>게임 안의 '생활 목표'는 폐지하고 스팀 업적으로만 둔다.</strong>
+  같은 성취를 게임 안과 스팀 두 곳에 두지 않는다.</li>
+<li>업적은 <strong>계정 영구</strong>다. 판이 끝나도 남는다(생활 목표는 판 한정이었다).</li>
+<li>보상 없음. 업적은 게임 규칙에 아무 영향도 주지 않는다.</li>
+<li>조건은 <strong>새 시스템 없이 기존 값·이벤트로 판정</strong>한다.</li>
+</ul>
+<h3 id="_1">폐지 시 손댈 곳 (구현 단계에서)<a class="headerlink" href="#_1" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>파일</th>
+<th>할 일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Core/LifeGoals.cs</code> · <code>Core/LifeGoalRunner.cs</code></td>
+<td>판정 로직은 업적 판정기로 옮기고 게임 내 표시·알림(<code>RaiseNotice("생활 목표 달성 …")</code>) 제거</td>
+</tr>
+<tr>
+<td><code>UI/StatsUI.cs</code></td>
+<td>'생활 목표' 구획 삭제</td>
+</tr>
+<tr>
+<td><code>UI/PlayGuideUI.cs</code></td>
+<td>'생활 목표' 장 + 통계 설명 줄 삭제</td>
+</tr>
+<tr>
+<td><code>Core/SaveData.cs</code> · <code>Core/SaveLoadManager.cs</code></td>
+<td><code>lifeGoalMask</code>·<code>lifeGoalStableSeconds</code> — 🛑 필드는 구 세이브 호환으로 남기고 읽기만 끊는다. 단 '무사한 사흘'처럼 <strong>한 판 안에서 누적</strong>되는 조건의 진행값은 세이브에 계속 둔다</td>
+</tr>
+<tr>
+<td><code>Exploration/ExplorationManager.cs:893</code> 등 호출부</td>
+<td>업적 판정기 호출로 교체</td>
+</tr>
+<tr>
+<td><code>Docs/플레이가이드.md</code> · <code>기획서.md</code> 11장</td>
+<td>생활 목표 서술 삭제/개정</td>
+</tr>
+<tr>
+<td><code>Resources/Localization/*.txt</code></td>
+<td>생활 목표 문구 정리(업적 이름·설명은 스팀 파트너 사이트에서 언어별로 입력)</td>
+</tr>
+<tr>
+<td><code>AutoPlayDirector.cs</code></td>
+<td>생활 목표 언급 주석 정리</td>
+</tr>
+</tbody>
+</table>
+<p>⚠️ 이 문서를 기획의 단일 소스로 삼되, 위 항목이 끝나기 전까지 <code>기획서.md</code> 11장·<code>CLAUDE.md</code> 의 생활 목표 서술은 stale 이다.</p>
+<h2 id="2-26">2. 업적 목록 (초안 26종)<a class="headerlink" href="#2-26" title="Permanent link"> ¶</a></h2>
+<blockquote>
+<p>수치(거리·일수·격파 수)는 <strong>임시값</strong>이다. 자동 플레이 기록으로 맞춘다.
+"한 판" = 한 번의 새 게임 안에서 달성. 여러 판 합산이 아니다.</p>
+</blockquote>
+<h3 id="_2">진행·거리<a class="headerlink" href="#_2" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DIST_1K</code></td>
+<td>출발</td>
+<td>한 판 누적 1,000km</td>
+</tr>
+<tr>
+<td><code>DIST_10K</code></td>
+<td>장거리 노선</td>
+<td>한 판 누적 10,000km</td>
+</tr>
+<tr>
+<td><code>DIST_50K</code></td>
+<td>끝없는 선로</td>
+<td>한 판 누적 50,000km</td>
+</tr>
+<tr>
+<td><code>DAY_7</code></td>
+<td>일주일</td>
+<td>한 판 7일 생존</td>
+</tr>
+<tr>
+<td><code>DAY_30</code></td>
+<td>한 달</td>
+<td>한 판 30일 생존</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">공동체 (옛 생활 목표 5종 포함)<a class="headerlink" href="#5" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>LIFE_BED</code></td>
+<td>모두의 잠자리</td>
+<td>생존 대원 전원에게 침대 지정 (생존 1명 이상)</td>
+</tr>
+<tr>
+<td><code>LIFE_LOUNGE</code></td>
+<td>첫 휴게 공간</td>
+<td>휴게 설비에서 한 명 이상이 <strong>실제로</strong> 쉼(예약만으로는 불가)</td>
+</tr>
+<tr>
+<td><code>LIFE_COMPANION</code></td>
+<td>새로운 동료</td>
+<td>탐색 생존자를 처음 태움</td>
+</tr>
+<tr>
+<td><code>LIFE_UPGRADE</code></td>
+<td>첫 생활 개선</td>
+<td>기종 번호 2 이상 설비를 하나 지음</td>
+</tr>
+<tr>
+<td><code>LIFE_STABLE</code></td>
+<td>안정된 하루</td>
+<td>하루 동안 사망·굶주림 피해·정신 붕괴 없음</td>
+</tr>
+<tr>
+<td><code>CREW_10</code></td>
+<td>열 명의 방주</td>
+<td>대원 10명 동시 생존</td>
+</tr>
+<tr>
+<td><code>STABLE_3</code></td>
+<td>무사한 사흘</td>
+<td>'안정된 하루' 3일 연속</td>
+</tr>
+<tr>
+<td><code>MBTI_16</code></td>
+<td>열여섯 가지 사람</td>
+<td>한 판에서 MBTI 16유형을 모두 태움</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">열차<a class="headerlink" href="#_3" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CAR_5</code></td>
+<td>증축</td>
+<td>칸 5개</td>
+</tr>
+<tr>
+<td><code>FLOOR_2</code></td>
+<td>위층</td>
+<td>2층 증축 첫 1회</td>
+</tr>
+<tr>
+<td><code>CAR_MAXED</code></td>
+<td>완전 무장</td>
+<td>한 칸의 강화 세 축을 모두 Lv.5 (= 2층 문턱)</td>
+</tr>
+<tr>
+<td><code>GRADE_CORE</code></td>
+<td>코어 등급</td>
+<td>제작 등급(<code>Grade</code>) 5 설비를 하나 지음</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">전투<a class="headerlink" href="#_4" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>KILL_1</code></td>
+<td>첫 격파</td>
+<td>적 1기 격파</td>
+</tr>
+<tr>
+<td><code>KILL_500</code></td>
+<td>방어선</td>
+<td>한 판 적 500기 격파</td>
+</tr>
+<tr>
+<td><code>TURRET_ALL</code></td>
+<td>화력 편성</td>
+<td>포탑 종류 6종을 한 열차에 동시에 설치</td>
+</tr>
+<tr>
+<td><code>RED_CLEAN</code></td>
+<td>레드 존 통과</td>
+<td>레드 구간 하나를 칸 파괴 없이 통과</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">탐색·연구·사건<a class="headerlink" href="#_5" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SCOUT_BACK</code></td>
+<td>정찰 복귀</td>
+<td>탐색대 첫 무사 귀환(사망 0)</td>
+</tr>
+<tr>
+<td><code>LOOT_CORE</code></td>
+<td>코어 회수</td>
+<td>코어 등급 자원을 처음 획득</td>
+</tr>
+<tr>
+<td><code>RESEARCH_50</code></td>
+<td>학자</td>
+<td>한 판 연구 50노드 완료</td>
+</tr>
+<tr>
+<td><code>CARD_10</code></td>
+<td>선택의 무게</td>
+<td>한 판 선택 사건 카드 10장 결정</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">숨김<a class="headerlink" href="#_6" title="Permanent link"> ¶</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>이름</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MEMORIAL_10</code></td>
+<td>위령비</td>
+<td>한 판 사망 대원 10명이 위령비에 이름을 남김</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3">3. 구현 원칙 (연동 시)<a class="headerlink" href="#3" title="Permanent link"> ¶</a></h2>
+<ul>
+<li>🛑 <strong>판정은 한 곳</strong>(<code>Achievements</code> 정적 클래스 하나). 게임 코드는 이벤트만 쏘고, 조건 해석은 그 클래스가 한다.
+  UI·봇이 조건을 따로 추측하지 않는다(생활 목표 <code>MarkNewCompanion</code> 방식 유지).</li>
+<li>🛑 <strong>Steamworks 가 없어도 게임이 돈다.</strong> 초기화 실패(오프라인·스팀 미실행·에디터)면 조용히 무시한다.</li>
+<li>🛑 static 상태는 <code>ResetStatics()</code> 로 되돌리고, 구독은 <code>GameEvents.ResetAllSubscriptions()</code> 목록에 넣는다(CLAUDE.md 3장).</li>
+<li>자동 플레이(<code>AutoPlayDirector</code>) 중에는 <strong>업적을 보내지 않는다</strong> — 검증 봇이 개발자 계정에 업적을 찍는다.</li>
+<li>한 판 누적 조건(격파 수·연속 안정일 등)의 진행값은 세이브에 둔다. 이어하기에서 0 이 되면 안 된다.</li>
+<li>업적 이름·설명의 번역은 스팀 파트너 사이트에서 입력한다(게임 내 <code>Loc</code> 표에 넣지 않는다).</li>
+</ul></article><p class="meta">기획과 실제 구현 상태는 각 문서의 기준일과 상태 표시를 확인해 주세요.</p></main></body></html>
