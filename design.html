@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>통합 기획서 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획서.md</p><details><summary>이 문서의 목차</summary><div class="toc">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>통합 기획서 · 방주 열차 기획 위키</title><link rel="stylesheet" href="style.css"><script defer src="search.js"></script></head><body><aside><strong>ARK TRAIN</strong><small>방주 열차 · 기획 위키</small><nav aria-label="문서 메뉴"><a href="index.html">위키 홈</a><a href="design.html">통합 기획서</a><a href="events.html">사건 카드 위키</a><a href="slots.html">슬롯 · 설비 · UI 도감</a><a href="research-atlas.html">연구 UI · 슬롯 도감</a><a href="choices.html">선택 사건 설계</a><a href="crew.html">대원 · 대화 · 패닉</a><a href="tutorial.html">튜토리얼 · 첫 운행</a><a href="flow.html">플레이 흐름</a><a href="achievements.html">스팀 업적</a><a href="music.html">BGM 설계</a><a href="facilities.html">설비 · 확장안</a><a href="migration.html">기획 개정 이관표</a><a href="archive.html">이전 기획서 (보관)</a></nav></aside><main><label for="search">기획 문서 전체 검색</label><input id="search" type="search" placeholder="사건 카드, 스트레스, 연구…" autocomplete="off"><div id="results" aria-live="polite"></div><article><p class="meta">문서 원본: 기획서.md</p><details><summary>이 문서의 목차</summary><div class="toc">
 <ul>
 <li><a href="#ark-train">방주 열차 (Ark Train) 통합 기획서</a><ul>
 <li><a href="#0">0. 문서의 역할과 적용 상태</a></li>
@@ -62,7 +62,10 @@
 </ul>
 </li>
 <li><a href="#10">10. 방어와 회복 구간</a><ul>
-<li><a href="#101">10.1 전투 — 유지</a></li>
+<li><a href="#101">10.1 전투 — 유지</a><ul>
+<li><a href="#101-a-2026-09-27">10.1-a 포탑 종류 특성 — 신규 (2026-09-27 사용자 지시 "자동 공격인 점 참고, 특성을 확실히", 구현 · 밸런스 검증 대기)</a></li>
+</ul>
+</li>
 <li><a href="#102-d08-2026-09-09-play">10.2 한시적 회복 구간 — 신규 D08 · 🔎 코덱스 검토 필요 (2026-09-09 구현, Play 실측)</a></li>
 </ul>
 </li>
@@ -729,23 +732,93 @@
 </tr>
 <tr>
 <td>돌진형</td>
-<td>근거리 기관·산탄</td>
+<td>근거리 기관(처치 연쇄)·산탄(밀쳐내기)</td>
 </tr>
 <tr>
 <td>포격형</td>
-<td>장거리 저격·곡사</td>
+<td>저격·곡사, 탄은 돌격 요격, 사격은 중기관 제압</td>
 </tr>
 <tr>
 <td>군체형</td>
-<td>광역·관통</td>
+<td>곡사 착탄 광역·산탄 펠릿</td>
 </tr>
 <tr>
 <td>장갑형</td>
-<td>높은 단발 피해·관통</td>
+<td>저격(장갑 무시)</td>
 </tr>
 </tbody>
 </table>
 <p>종류 6종과 진화 3계열, 기존 공격·공속·치명·체력 강화는 유지한다. 전투 조작의 추가보다는 전투로 빠진 인원이 생산·휴식에 어떤 영향을 주는지 읽히게 한다.</p>
+<h4 id="101-a-2026-09-27">10.1-a 포탑 종류 특성 — 신규 (2026-09-27 사용자 지시 "자동 공격인 점 참고, 특성을 확실히", 구현 · 밸런스 검증 대기)<a class="headerlink" href="#101-a-2026-09-27" title="Permanent link"> ¶</a></h4>
+<p>포탑은 자동으로 쏜다. 니케에서 무기의 성격은 플레이어의 조준에서 나오지만 여기엔 조준하는 손이 없다. 그래서 종류의 성격은 <strong>① 무엇을 먼저 쏘나(조준 규칙) ② 어떻게 날아가나(탄 방식) ③ 고유 효과 하나</strong>로만 드러낸다. 배수만 다른 종류는 화면에서 "조금 센 포탑"일 뿐이다.</p>
+<table>
+<thead>
+<tr>
+<th>종류</th>
+<th>조준 규칙</th>
+<th>탄 방식</th>
+<th>고유 효과</th>
+<th>답이 되는 적</th>
+<th>실루엣</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>돌격</td>
+<td>가장 가까운 적</td>
+<td>직선</td>
+<td>날아오는 적 포탄을 <strong>먼저 격추</strong></td>
+<td>포격형의 탄 · 정찰형</td>
+<td>외줄 총열 + 레이더 접시</td>
+</tr>
+<tr>
+<td>기관</td>
+<td>가장 약한 적(근거리 선호)</td>
+<td>빠르고 흩뿌리는 직선</td>
+<td><strong>처치하면 곧장 다음 발</strong></td>
+<td>돌진형 · 군체형</td>
+<td>짧은 쌍열 + 드럼 탄창</td>
+</tr>
+<tr>
+<td>저격</td>
+<td>가장 단단한 적(장거리 선호)</td>
+<td>거의 즉시 꽂히는 긴 섬광(약 144u/s) + 관통 1</td>
+<td>0.8초 <strong>조준선</strong> 뒤 한 발, <strong>장갑 무시</strong></td>
+<td>장갑형 · 포격형</td>
+<td>긴 외줄 + 조준경</td>
+</tr>
+<tr>
+<td>산탄</td>
+<td>가장 가까운 적(근거리 선호)</td>
+<td>펠릿 7발 부채꼴(흩어짐·사거리 16u)</td>
+<td>근거리 적 <strong>밀쳐내기</strong> + 0.35초 경직</td>
+<td>돌진형 · 군체형</td>
+<td>넓은 부채꼴 3열</td>
+</tr>
+<tr>
+<td>곡사</td>
+<td>가장 밀집한 무리</td>
+<td><strong>포물선</strong></td>
+<td>착탄 반경 3u <strong>전원 피해</strong></td>
+<td>군체형 · 포격형</td>
+<td>2×2 로켓 포드</td>
+</tr>
+<tr>
+<td>중기관</td>
+<td><strong>표적 고정</strong></td>
+<td>직선</td>
+<td>예열 + 맞은 적 <strong>사격 ×1.8 느림</strong>(2초)</td>
+<td>정찰형 · 포격형</td>
+<td>개틀링 + 탄약통</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>고유 효과는 종류마다 정확히 하나이고, 그 효과가 답이 되는 적 유형이 있다. 돌진형·장갑형은 쏘지 않으므로 요격·제압이 헛돈다 — 그게 "무엇을 세울까"를 가른다.</li>
+<li>저격 조준선은 쿨다운 <strong>안에서</strong> 흐른다(DPS 손해 없음). 자동 사격에서 플레이어가 읽을 수 있는 유일한 의도 표시다.</li>
+<li>옛 산탄 2.5 · 곡사 5.5 광역 반경은 <strong>제어 효과에만</strong> 쓰여 연사·관통 트리에서는 광역이 없었다. 지금은 펠릿과 착탄 피해가 광역을 맡는다.</li>
+<li>그림 = <code>Tools/turret_class_sprites.py</code>(절차 생성, 실루엣이 곧 규칙). 단일 소스 = <code>TurretController</code> 종류 특성 절.</li>
+</ul>
 <h3 id="102-d08-2026-09-09-play">10.2 한시적 회복 구간 — 신규 D08 · 🔎 코덱스 검토 필요 (2026-09-09 구현, Play 실측)<a class="headerlink" href="#102-d08-2026-09-09-play" title="Permanent link"> ¶</a></h3>
 <p>강한 교전 뒤에는 기존 그린 구역을 이용한 짧은 회복 기회를 배치한다. 새 지역·날씨·스토리텔러 AI는 만들지 않는다.</p>
 <p>초안 조건:</p>
